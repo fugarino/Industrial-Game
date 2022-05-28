@@ -13,6 +13,9 @@ const gravity = 0.5;
 const platformVines = new Image();
 platformVines.src = "./img/Industrial-Platform-Vines.png";
 
+const spriteIdle = new Image();
+spriteIdle.src = "./img/CharacterIdle.png";
+
 // Player class will store and update all properties of player (new Player)
 class Player {
   constructor() {
@@ -27,17 +30,25 @@ class Player {
       y: 0,
     };
     // width and height determine the size of the player
-    this.width = 50;
-    this.height = 50;
+    this.width = 88;
+    this.height = 88;
+
+    this.image = spriteIdle;
+    this.frames = 0;
+    this.num = 0;
   }
   // the draw method is drawing a red square refrencing the position and size of the player
   draw() {
-    c.fillStyle = "red";
-    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    c.drawImage(this.image, 88 * this.frames, 0, 88, 88, this.position.x, this.position.y, this.width, this.height);
   }
 
   // the update method will be called over and over again updating the player's properties
   update() {
+    this.num++;
+    if (this.num % 8 === 0) {
+      this.frames++;
+    }
+    if (this.frames > 3) this.frames = 0;
     this.draw();
     this.position.y += this.velocity.y;
     this.position.x += this.velocity.x;
