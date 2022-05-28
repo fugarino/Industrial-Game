@@ -36,37 +36,68 @@ class Player {
   update() {
     this.draw();
     this.position.y += this.velocity.y;
+    this.position.x += this.velocity.x;
 
     if (this.position.y + this.height < canvas.height) this.velocity.y += gravity;
+    if (player.position.y >= canvas.height - player.height) player.velocity.y = 0;
   }
 }
 
 const player = new Player();
+
+const keys = {
+  left: {
+    pressed: false,
+  },
+  right: {
+    pressed: false,
+  },
+};
 
 function animate() {
   // recursively calling animate function to create a game loop
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
   player.update();
-  if (player.position.y >= canvas.height - player.height) player.velocity.y = 0;
+
+  if (keys.right.pressed) {
+    player.velocity.x = 5;
+  } else if (keys.left.pressed) {
+    player.velocity.x = -5;
+  } else {
+    player.velocity.x = 0;
+  }
 }
 animate();
 
 // EventListeners
 window.addEventListener("keydown", ({ key }) => {
   switch (key) {
-    case "w":
-      console.log("up");
+    case "w": // Up
       if (player.position.y + player.height - 2 === canvas.height) player.velocity.y = -20;
       break;
-    case "s":
-      console.log("down");
+    case "s": // Down
       break;
-    case "a":
-      console.log("left");
+    case "a": // Left
+      keys.left.pressed = true;
       break;
-    case "d":
-      console.log("right");
+    case "d": // Right
+      keys.right.pressed = true;
+      break;
+  }
+});
+
+window.addEventListener("keyup", ({ key }) => {
+  switch (key) {
+    case "w": // Up
+      break;
+    case "s": // Down
+      break;
+    case "a": // Left
+      keys.left.pressed = false;
+      break;
+    case "d": // Right
+      keys.right.pressed = false;
       break;
   }
 });
