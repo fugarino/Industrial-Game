@@ -191,12 +191,13 @@ function animate() {
     }
   }
 
-  if (player.position.y < 900) {
+  // 900
+  if (player.position.y < 840) {
     platforms.forEach((platform) => {
       platform.position.y += 2;
     });
     player.position.y += 2;
-  } else if (player.position.y > 1000) {
+  } else if (player.position.y > 1112) {
     platforms.forEach((platform) => {
       platform.position.y -= 5;
     });
