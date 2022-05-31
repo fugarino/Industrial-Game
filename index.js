@@ -1,8 +1,8 @@
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
-canvas.width = 1024;
-canvas.height = 576;
+canvas.width = 3024;
+canvas.height = 2076;
 
 const gravity = 0.5;
 
@@ -27,7 +27,7 @@ boxSprite.src = "./img/Industrial-Box.png";
 class Player {
   constructor() {
     this.position = {
-      x: 100,
+      x: 1460,
       y: 100,
     };
 
@@ -137,14 +137,14 @@ class Box {
 
 const player = new Player();
 const platforms = [
-  new Platform({ x: 0, y: 500, image: platformVines }),
-  new Platform({ x: 322, y: 500, image: platformVines }),
-  new Platform({ x: 644, y: 500, image: platformVines }),
-  new Platform({ x: 966, y: 500, image: platformVines }),
-  new Platform({ x: 566, y: 200, image: platformVines }),
-  new Platform({ x: 966, y: 300, image: platformVines }),
+  new Platform({ x: 900, y: 1200, image: platformVines }),
+  new Platform({ x: 1222, y: 1200, image: platformVines }),
+  new Platform({ x: 1544, y: 1200, image: platformVines }),
+  new Platform({ x: 1866, y: 1200, image: platformVines }),
+  new Platform({ x: 1466, y: 900, image: platformVines }),
+  new Platform({ x: 1866, y: 1000, image: platformVines }),
 ];
-const box = new Box({ x: 600, y: 388, image: boxSprite });
+const box = new Box({ x: 1100, y: 1088, image: boxSprite });
 
 let currentKey;
 const keys = {
@@ -171,20 +171,24 @@ function animate() {
   box.draw();
   player.update();
 
-  if (keys.right.pressed) {
-    if (player.position.x + player.width >= canvas.width) {
-      player.velocity.x = 0;
-    } else {
-      player.velocity.x = 7;
-    }
-  } else if (keys.left.pressed) {
-    if (player.position.x <= 0) {
-      player.velocity.x = 0;
-    } else {
-      player.velocity.x = -7;
-    }
+  if (keys.right.pressed && player.position.x < 1600) {
+    player.velocity.x = 7;
+  } else if (keys.left.pressed && player.position.x > 1400) {
+    player.velocity.x = -7;
   } else {
     player.velocity.x = 0;
+
+    if (keys.right.pressed) {
+      platforms.forEach((platform) => {
+        platform.position.x -= 7;
+      });
+      box.position.x -= 7;
+    } else if (keys.left.pressed) {
+      platforms.forEach((platform) => {
+        platform.position.x += 7;
+      });
+      box.position.x += 7;
+    }
   }
 
   platforms.forEach((platform) => {
@@ -198,6 +202,7 @@ function animate() {
     }
   });
 
+  // Box Collision
   if (
     player.position.y + player.height <= box.position.y &&
     player.position.y + player.height + player.velocity.y >= box.position.y &&
