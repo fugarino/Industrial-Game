@@ -171,9 +171,9 @@ function animate() {
   box.draw();
   player.update();
 
-  if (keys.right.pressed && player.position.x < 1600) {
+  if (keys.right.pressed && player.position.x < 1500) {
     player.velocity.x = 7;
-  } else if (keys.left.pressed && player.position.x > 1400) {
+  } else if (keys.left.pressed && player.position.x > 1450) {
     player.velocity.x = -7;
   } else {
     player.velocity.x = 0;
@@ -189,6 +189,18 @@ function animate() {
       });
       box.position.x += 7;
     }
+  }
+
+  if (player.position.y < 900) {
+    platforms.forEach((platform) => {
+      platform.position.y += 2;
+    });
+    player.position.y += 2;
+  } else if (player.position.y > 1000) {
+    platforms.forEach((platform) => {
+      platform.position.y -= 5;
+    });
+    player.position.y -= 5;
   }
 
   platforms.forEach((platform) => {
