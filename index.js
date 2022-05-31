@@ -1,15 +1,11 @@
-// Selectors
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
-// How big the canvas is
 canvas.width = 1024;
 canvas.height = 576;
 
-// Gravity will accelerate player's falling speed
 const gravity = 0.5;
 
-// Images
 const platformVines = new Image();
 platformVines.src = "./img/Industrial-Platform-Vines.png";
 
@@ -28,20 +24,17 @@ spriteRunLeft.src = "./img/Untitled-3.png";
 const boxSprite = new Image();
 boxSprite.src = "./img/Industrial-Box.png";
 
-// Player class will store and update all properties of player (new Player)
 class Player {
   constructor() {
-    // position - where on the canvas it is at any given time
     this.position = {
       x: 100,
       y: 100,
     };
-    // velocity - how fast the player is moving in any given direction
+
     this.velocity = {
       x: 0,
       y: 0,
     };
-    // width and height determine the size of the player
     this.width = 88;
     this.height = 88;
 
@@ -61,7 +54,7 @@ class Player {
 
     this.currentSprite = this.sprites.stand.right;
   }
-  // the draw method is drawing a red square refrencing the position and size of the player
+
   draw() {
     c.drawImage(
       this.currentSprite,
@@ -76,7 +69,6 @@ class Player {
     );
   }
 
-  // the update method will be called over and over again updating the player's properties
   update() {
     if (this.currentSprite === this.sprites.stand.right) {
       this.num++;
@@ -149,6 +141,8 @@ const platforms = [
   new Platform({ x: 322, y: 500, image: platformVines }),
   new Platform({ x: 644, y: 500, image: platformVines }),
   new Platform({ x: 966, y: 500, image: platformVines }),
+  new Platform({ x: 566, y: 200, image: platformVines }),
+  new Platform({ x: 966, y: 300, image: platformVines }),
 ];
 const box = new Box({ x: 600, y: 388, image: boxSprite });
 
@@ -168,9 +162,7 @@ const keys = {
   },
 };
 
-// animate function will recursively clear the entire canvas and then update the player properties
 function animate() {
-  // recursively calling animate function to create a game loop
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
   platforms.forEach((platform) => {
@@ -195,7 +187,6 @@ function animate() {
     player.velocity.x = 0;
   }
 
-  // Platform collision detection
   platforms.forEach((platform) => {
     if (
       player.position.y + player.height <= platform.position.y &&
@@ -207,7 +198,6 @@ function animate() {
     }
   });
 
-  // Box collision detection
   if (
     player.position.y + player.height <= box.position.y &&
     player.position.y + player.height + player.velocity.y >= box.position.y &&
@@ -233,14 +223,21 @@ function animate() {
     box.position.x -= 1;
   }
 
-  // Sprite switching
-  if (keys.right.pressed && currentKey === "right" && player.currentSprite !== player.sprites.run.right) {
+  if (
+    keys.right.pressed &&
+    currentKey === "right" &&
+    player.currentSprite !== player.sprites.run.right
+  ) {
     player.currentSprite = player.sprites.run.right;
-  } else if (keys.left.pressed && currentKey === "left" && player.currentSprite !== player.sprites.run.left) {
+  } else if (
+    keys.left.pressed &&
+    currentKey === "left" &&
+    player.currentSprite !== player.sprites.run.left
+  ) {
     player.currentSprite = player.sprites.run.left;
   }
 }
-// animate();
+animate();
 
 // EventListeners
 window.addEventListener("keydown", ({ key }) => {
