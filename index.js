@@ -171,6 +171,7 @@ function animate() {
   box.draw();
   player.update();
 
+  // X-Axis Platform Displacement
   if (keys.right.pressed && player.position.x < 1500) {
     player.velocity.x = 7;
   } else if (keys.left.pressed && player.position.x > 1450) {
@@ -191,17 +192,19 @@ function animate() {
     }
   }
 
-  // 900
+  // Y-Axis Playform Displacement
   if (player.position.y < 840) {
     platforms.forEach((platform) => {
       platform.position.y += 2;
     });
     player.position.y += 2;
-  } else if (player.position.y > 1112) {
+    box.position.y += 2;
+  } else if (player.position.y >= 1112) {
     platforms.forEach((platform) => {
-      platform.position.y -= 5;
+      platform.position.y -= 6;
     });
-    player.position.y -= 5;
+    player.position.y -= 6;
+    box.position.y -= 6;
   }
 
   platforms.forEach((platform) => {
@@ -229,16 +232,14 @@ function animate() {
     player.position.y + player.height >= box.position.y &&
     keys.right.pressed
   ) {
-    player.velocity.x = 1;
-    box.position.x += 1;
+    box.position.x += 7;
   } else if (
     player.position.x <= box.position.x + box.width &&
     player.position.x >= box.position.x &&
     player.position.y + player.height >= box.position.y &&
     keys.left.pressed
   ) {
-    player.velocity.x = -1;
-    box.position.x -= 1;
+    box.position.x -= 7;
   }
 
   if (
