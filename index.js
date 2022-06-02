@@ -146,25 +146,38 @@ class Box {
       x: x,
       y: y,
     };
+    this.velocity = {
+      x: 0,
+      y: 0,
+    };
     this.image = image;
   }
 
   draw() {
     c.drawImage(this.image, this.position.x, this.position.y);
   }
+
+  update() {
+    this.draw();
+    this.position.y += this.velocity.y;
+    this.position.x += this.velocity.x;
+
+    if (this.position.y + this.height < canvas.height) this.velocity.y += gravity;
+  }
 }
 
 const player = new Player();
 const platforms = [
-  new Platform({ x: 900, y: 1200, image: platformVines }),
-  new Platform({ x: 1222, y: 1200, image: platformVines }),
-  new Platform({ x: 1544, y: 1200, image: platformVines }),
-  new Platform({ x: 1866, y: 1200, image: platformVines }),
-  new Platform({ x: 1266, y: 900, image: platformVines }),
-  new Platform({ x: 1666, y: 1000, image: platformVines }),
+  new Platform({ x: 1278, y: 1200, image: platformVines }),
+  new Platform({ x: 1600, y: 1200, image: platformVines }),
+  new Platform({ x: 1922, y: 1200, image: platformVines }),
+  new Platform({ x: 2244, y: 1200, image: platformVines }),
+  new Platform({ x: 2566, y: 1200, image: platformVines }),
+  new Platform({ x: 1966, y: 900, image: platformVines }),
+  new Platform({ x: 2366, y: 1000, image: platformVines }),
 ];
-const wall = new Wall({ x: 2074, y: 560, image: wallSprite });
-const box = new Box({ x: 1100, y: 1088, image: boxSprite });
+// const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
+const box = new Box({ x: 1800, y: 900, image: boxSprite });
 
 let currentKey;
 const keys = {
@@ -188,8 +201,9 @@ function animate() {
   platforms.forEach((platform) => {
     platform.draw();
   });
-  wall.draw();
-  box.draw();
+  // wall.draw();
+  // box.draw();
+  box.update();
   player.update();
 
   let pushingBoxRight = false;
@@ -197,14 +211,14 @@ function animate() {
   let collidingWall = false;
 
   // Wall Collision
-  if (
-    player.position.x + player.width >= wall.position.x &&
-    player.position.x <= wall.position.x &&
-    keys.right.pressed
-  ) {
-    collidingWall = true;
-    player.velocity.x = 0;
-  }
+  // if (
+  //   player.position.x + player.width >= wall.position.x &&
+  //   player.position.x <= wall.position.x &&
+  //   keys.right.pressed
+  // ) {
+  //   collidingWall = true;
+  //   player.velocity.x = 0;
+  // }
 
   // Box Collision
   if (
@@ -220,11 +234,12 @@ function animate() {
     player.position.y + player.height >= box.position.y &&
     keys.right.pressed
   ) {
-    if (wall.position.x < 1710) {
-      box.position.x += 0;
-    } else {
-      box.position.x += 7;
-    }
+    // if (wall.position.x < 1710) {
+    //   box.position.x += 0;
+    // } else {
+    //   box.position.x += 7;
+    // }
+    box.position.x += 7;
     pushingBoxRight = true;
   } else if (
     player.position.x <= box.position.x + box.width &&
@@ -250,14 +265,14 @@ function animate() {
           platform.position.x -= 7;
         });
         box.position.x -= 7;
-        wall.position.x -= 7;
+        // wall.position.x -= 7;
       }
     } else if (keys.left.pressed) {
       platforms.forEach((platform) => {
         platform.position.x += 7;
       });
       box.position.x += 7;
-      wall.position.x += 7;
+      // wall.position.x += 7;
     }
   }
 
@@ -268,14 +283,14 @@ function animate() {
     });
     player.position.y += 2;
     box.position.y += 2;
-    wall.position.y += 2;
+    // wall.position.y += 2;
   } else if (player.position.y >= 1112) {
     platforms.forEach((platform) => {
       platform.position.y -= 6;
     });
     player.position.y -= 6;
     box.position.y -= 6;
-    wall.position.y -= 6;
+    // wall.position.y -= 6;
   }
 
   platforms.forEach((platform) => {
@@ -286,6 +301,16 @@ function animate() {
       player.position.x <= platform.position.x + platform.width
     ) {
       player.velocity.y = 0;
+    }
+  });
+  platforms.forEach((platform) => {
+    if (
+      box.position.y + box.height <= platform.position.y &&
+      box.position.y + box.height + box.velocity.y + 12 >= platform.position.y &&
+      box.position.x + box.width >= platform.position.x &&
+      box.position.x <= platform.position.x + platform.width
+    ) {
+      box.velocity.y = 0;
     }
   });
 
