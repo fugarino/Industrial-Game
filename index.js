@@ -221,11 +221,7 @@ function animate() {
     keys.right.pressed
   ) {
     if (wall.position.x < 1710) {
-      console.log("1");
       box.position.x += 0;
-      platforms.forEach((platform) => {
-        platform.position.x += 0;
-      });
     } else {
       box.position.x += 7;
     }
@@ -250,7 +246,6 @@ function animate() {
 
     if (keys.right.pressed) {
       if (!collidingWall) {
-        console.log("2");
         platforms.forEach((platform) => {
           platform.position.x -= 7;
         });
