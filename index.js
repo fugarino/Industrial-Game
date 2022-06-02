@@ -168,7 +168,7 @@ class Box {
 
 const player = new Player();
 const platforms = [
-  new Platform({ x: 1278, y: 1200, image: platformVines }),
+  new Platform({ x: 1278, y: 1400, image: platformVines }),
   new Platform({ x: 1600, y: 1200, image: platformVines }),
   new Platform({ x: 1922, y: 1200, image: platformVines }),
   new Platform({ x: 2244, y: 1200, image: platformVines }),
@@ -232,6 +232,7 @@ function animate() {
     player.position.x + player.width >= box.position.x &&
     player.position.x <= box.position.x &&
     player.position.y + player.height >= box.position.y &&
+    player.position.y <= box.position.y + box.height &&
     keys.right.pressed
   ) {
     // if (wall.position.x < 1710) {
