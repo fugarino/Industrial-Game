@@ -24,6 +24,9 @@ spriteRunLeft.src = "./img/Untitled-3.png";
 const boxSprite = new Image();
 boxSprite.src = "./img/Industrial-Box.png";
 
+const wallSprite = new Image();
+wallSprite.src = "./img/WallRight.png";
+
 class Player {
   constructor() {
     this.position = {
@@ -119,6 +122,22 @@ class Platform {
   }
 }
 
+class Wall {
+  constructor({ x, y, image }) {
+    this.width = image.width;
+    this.height = image.height;
+    (this.position = {
+      x: x,
+      y: y,
+    }),
+      (this.image = image);
+  }
+
+  draw() {
+    c.drawImage(this.image, this.position.x, this.position.y);
+  }
+}
+
 class Box {
   constructor({ x, y, image }) {
     this.width = 100;
@@ -141,9 +160,10 @@ const platforms = [
   new Platform({ x: 1222, y: 1200, image: platformVines }),
   new Platform({ x: 1544, y: 1200, image: platformVines }),
   new Platform({ x: 1866, y: 1200, image: platformVines }),
-  new Platform({ x: 1466, y: 900, image: platformVines }),
-  new Platform({ x: 1866, y: 1000, image: platformVines }),
+  new Platform({ x: 1266, y: 900, image: platformVines }),
+  new Platform({ x: 1666, y: 1000, image: platformVines }),
 ];
+const wall = new Wall({ x: 2074, y: 560, image: wallSprite });
 const box = new Box({ x: 1100, y: 1088, image: boxSprite });
 
 let currentKey;
@@ -168,55 +188,23 @@ function animate() {
   platforms.forEach((platform) => {
     platform.draw();
   });
+  wall.draw();
   box.draw();
   player.update();
 
-  // X-Axis Platform Displacement
-  if (keys.right.pressed && player.position.x < 1500) {
-    player.velocity.x = 7;
-  } else if (keys.left.pressed && player.position.x > 1450) {
-    player.velocity.x = -7;
-  } else {
+  let pushingBoxRight = false;
+  let pushingBoxLeft = false;
+  let collidingWall = false;
+
+  // Wall Collision
+  if (
+    player.position.x + player.width >= wall.position.x &&
+    player.position.x <= wall.position.x &&
+    keys.right.pressed
+  ) {
+    collidingWall = true;
     player.velocity.x = 0;
-
-    if (keys.right.pressed) {
-      platforms.forEach((platform) => {
-        platform.position.x -= 7;
-      });
-      box.position.x -= 7;
-    } else if (keys.left.pressed) {
-      platforms.forEach((platform) => {
-        platform.position.x += 7;
-      });
-      box.position.x += 7;
-    }
   }
-
-  // Y-Axis Playform Displacement
-  if (player.position.y < 840) {
-    platforms.forEach((platform) => {
-      platform.position.y += 2;
-    });
-    player.position.y += 2;
-    box.position.y += 2;
-  } else if (player.position.y >= 1112) {
-    platforms.forEach((platform) => {
-      platform.position.y -= 6;
-    });
-    player.position.y -= 6;
-    box.position.y -= 6;
-  }
-
-  platforms.forEach((platform) => {
-    if (
-      player.position.y + player.height <= platform.position.y &&
-      player.position.y + player.height + player.velocity.y >= platform.position.y &&
-      player.position.x + player.width >= platform.position.x &&
-      player.position.x <= platform.position.x + platform.width
-    ) {
-      player.velocity.y = 0;
-    }
-  });
 
   // Box Collision
   if (
@@ -232,7 +220,16 @@ function animate() {
     player.position.y + player.height >= box.position.y &&
     keys.right.pressed
   ) {
-    box.position.x += 7;
+    if (wall.position.x < 1710) {
+      console.log("1");
+      box.position.x += 0;
+      platforms.forEach((platform) => {
+        platform.position.x += 0;
+      });
+    } else {
+      box.position.x += 7;
+    }
+    pushingBoxRight = true;
   } else if (
     player.position.x <= box.position.x + box.width &&
     player.position.x >= box.position.x &&
@@ -240,8 +237,64 @@ function animate() {
     keys.left.pressed
   ) {
     box.position.x -= 7;
+    pushingBoxLeft = true;
   }
 
+  // X-Axis Platform Displacement
+  if (keys.right.pressed && player.position.x < 1500) {
+    player.velocity.x = 7;
+  } else if (keys.left.pressed && player.position.x > 1450) {
+    player.velocity.x = -7;
+  } else {
+    player.velocity.x = 0;
+
+    if (keys.right.pressed) {
+      if (!collidingWall) {
+        console.log("2");
+        platforms.forEach((platform) => {
+          platform.position.x -= 7;
+        });
+        box.position.x -= 7;
+        wall.position.x -= 7;
+      }
+    } else if (keys.left.pressed) {
+      platforms.forEach((platform) => {
+        platform.position.x += 7;
+      });
+      box.position.x += 7;
+      wall.position.x += 7;
+    }
+  }
+
+  // Y-Axis Playform Displacement
+  if (player.position.y < 840) {
+    platforms.forEach((platform) => {
+      platform.position.y += 2;
+    });
+    player.position.y += 2;
+    box.position.y += 2;
+    wall.position.y += 2;
+  } else if (player.position.y >= 1112) {
+    platforms.forEach((platform) => {
+      platform.position.y -= 6;
+    });
+    player.position.y -= 6;
+    box.position.y -= 6;
+    wall.position.y -= 6;
+  }
+
+  platforms.forEach((platform) => {
+    if (
+      player.position.y + player.height <= platform.position.y &&
+      player.position.y + player.height + player.velocity.y >= platform.position.y &&
+      player.position.x + player.width >= platform.position.x &&
+      player.position.x <= platform.position.x + platform.width
+    ) {
+      player.velocity.y = 0;
+    }
+  });
+
+  // Changing Animations
   if (
     keys.right.pressed &&
     currentKey === "right" &&
