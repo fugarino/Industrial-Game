@@ -24,8 +24,20 @@ spriteRunLeft.src = "./img/Untitled-3.png";
 const boxSprite = new Image();
 boxSprite.src = "./img/Industrial-Box.png";
 
-const wallSprite = new Image();
-wallSprite.src = "./img/WallRight.png";
+// const wallSprite = new Image();
+// wallSprite.src = "./img/WallRight.png";
+
+const pressurePlateSprite = new Image();
+pressurePlateSprite.src = "./img/PressurePlate.png";
+
+const pressurePlateSpriteDown = new Image();
+pressurePlateSpriteDown.src = "./img/pressurePlateDown.png";
+
+const trapDoorDownToUpSprite = new Image();
+trapDoorDownToUpSprite.src = "./img/TrapDoorDownToUp.png";
+
+// Active
+let isPressurePlate1Active = false;
 
 class Player {
   constructor() {
@@ -166,9 +178,82 @@ class Box {
   }
 }
 
+class PressurePlate {
+  constructor({ x, y }) {
+    this.width = 112;
+    this.height = 112;
+    this.position = {
+      x: x,
+      y: y,
+    };
+    this.sprites = {
+      notActive: pressurePlateSprite,
+      active: pressurePlateSpriteDown,
+    };
+    this.currentSprite = this.sprites.notActive;
+  }
+
+  draw() {
+    c.drawImage(this.currentSprite, this.position.x, this.position.y);
+  }
+
+  update() {
+    if (
+      (player.position.x + player.width >= pressurePlate.position.x &&
+        player.position.x <= pressurePlate.position.x + pressurePlate.width &&
+        player.position.y >= pressurePlate.position.y) ||
+      (box.position.x + box.width >= pressurePlate.position.x &&
+        box.position.x <= pressurePlate.position.x + pressurePlate.width)
+    ) {
+      this.currentSprite = this.sprites.active;
+      isPressurePlate1Active = true;
+    } else {
+      this.currentSprite = this.sprites.notActive;
+      isPressurePlate1Active = false;
+    }
+    this.draw();
+  }
+}
+
+class TrapDoor {
+  constructor({ x, y }) {
+    this.width = 112;
+    this.height = 112;
+    this.frames = 0;
+    this.position = {
+      x: x,
+      y: y,
+    };
+    this.sprite = trapDoorDownToUpSprite;
+  }
+
+  draw() {
+    c.drawImage(
+      this.sprite,
+      112 * this.frames,
+      0,
+      112,
+      112,
+      this.position.x,
+      this.position.y,
+      this.width,
+      this.height
+    );
+  }
+
+  update() {
+    this.draw();
+    if (isPressurePlate1Active) {
+      this.frames = 3;
+    } else {
+      this.frames = 0;
+    }
+  }
+}
+
 const player = new Player();
 const platforms = [
-  new Platform({ x: 1278, y: 1400, image: platformVines }),
+  new Platform({ x: 1278, y: 1200, image: platformVines }),
   new Platform({ x: 1600, y: 1200, image: platformVines }),
   new Platform({ x: 1922, y: 1200, image: platformVines }),
   new Platform({ x: 2244, y: 1200, image: platformVines }),
@@ -178,6 +263,8 @@ const platforms = [
 ];
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
 const box = new Box({ x: 1800, y: 900, image: boxSprite });
+const pressurePlate = new PressurePlate({ x: 2000, y: 1090 });
+const trapDoor = new TrapDoor({ x: 1300, y: 1065 });
 
 let currentKey;
 const keys = {
@@ -203,6 +290,8 @@ function animate() {
   });
   // wall.draw();
   // box.draw();
+  pressurePlate.update();
+  trapDoor.update();
   box.update();
   player.update();
 
@@ -266,6 +355,8 @@ function animate() {
           platform.position.x -= 7;
         });
         box.position.x -= 7;
+        pressurePlate.position.x -= 7;
+        trapDoor.position.x -= 7;
         // wall.position.x -= 7;
       }
     } else if (keys.left.pressed) {
@@ -273,6 +364,8 @@ function animate() {
         platform.position.x += 7;
       });
       box.position.x += 7;
+      pressurePlate.position.x += 7;
+      trapDoor.position.x += 7;
       // wall.position.x += 7;
     }
   }
@@ -284,6 +377,8 @@ function animate() {
     });
     player.position.y += 2;
     box.position.y += 2;
+    pressurePlate.position.y += 2;
+    trapDoor.position.y += 2;
     // wall.position.y += 2;
   } else if (player.position.y >= 1112) {
     platforms.forEach((platform) => {
@@ -291,7 +386,19 @@ function animate() {
     });
     player.position.y -= 6;
     box.position.y -= 6;
+    pressurePlate.position.y -= 6;
+    trapDoor.position.y -= 6;
     // wall.position.y -= 6;
+  }
+
+  if (
+    player.position.y + player.height <= trapDoor.position.y &&
+    player.position.y + player.height + player.velocity.y >= trapDoor.position.y &&
+    player.position.x + player.width >= trapDoor.position.x &&
+    player.position.x <= trapDoor.position.x + trapDoor.width &&
+    isPressurePlate1Active
+  ) {
+    player.velocity.y = 0;
   }
 
   platforms.forEach((platform) => {
