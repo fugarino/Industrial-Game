@@ -186,7 +186,8 @@ class Box {
 }
 
 class PressurePlate {
-  constructor({ x, y }) {
+  constructor({ x, y, id }) {
+    this.id = id;
     this.width = 112;
     this.height = 112;
     this.position = {
@@ -205,25 +206,32 @@ class PressurePlate {
   }
 
   update() {
-    if (
-      (player.position.x + player.width >= pressurePlate.position.x &&
-        player.position.x <= pressurePlate.position.x + pressurePlate.width &&
-        player.position.y >= pressurePlate.position.y) ||
-      (box.position.x + box.width >= pressurePlate.position.x &&
-        box.position.x <= pressurePlate.position.x + pressurePlate.width)
-    ) {
-      this.currentSprite = this.sprites.active;
-      isPressurePlate1Active = true;
-    } else {
-      this.currentSprite = this.sprites.notActive;
-      isPressurePlate1Active = false;
-    }
-    this.draw();
+    pressurePlates.forEach((pressurePlate) => {
+      if (
+        (player.position.x + player.width >= pressurePlate.position.x &&
+          player.position.x <= pressurePlate.position.x + pressurePlate.width &&
+          player.position.y >= pressurePlate.position.y) ||
+        (box.position.x + box.width >= pressurePlate.position.x &&
+          box.position.x <= pressurePlate.position.x + pressurePlate.width)
+      ) {
+        if (pressurePlate.id === 2) {
+          isPressurePlate1Active = true;
+          this.currentSprite = this.sprites.active;
+        }
+      } else {
+        if (pressurePlate.id === 2) {
+          isPressurePlate1Active = false;
+          this.currentSprite = this.sprites.notActive;
+        }
+      }
+      this.draw();
+    });
   }
 }
 
 class TrapDoor {
-  constructor({ x, y }) {
+  constructor({ x, y, id }) {
+    this.id = id;
     this.width = 112;
     this.height = 112;
     this.frames = 0;
@@ -301,8 +309,15 @@ const platforms = [
 ];
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
 const box = new Box({ x: 1600, y: 900, image: boxSprite });
-const pressurePlate = new PressurePlate({ x: 2000, y: 1090 });
-const trapDoor = new TrapDoor({ x: 1820, y: 960 });
+const pressurePlates = [
+  new PressurePlate({ x: 2000, y: 1090, id: 1 }),
+  new PressurePlate({ x: 2600, y: 1090, id: 2 }),
+];
+// const pressurePlate = new PressurePlate({ x: 2000, y: 1090 });
+const trapDoors = [
+  new TrapDoor({ x: 1820, y: 960, id: 1 }),
+  new TrapDoor({ x: 2100, y: 820, id: 2 }),
+];
 const lever = new Lever({ x: 2300, y: 1090 });
 
 let currentKey;
@@ -329,9 +344,13 @@ function animate() {
   });
   // wall.draw();
   // box.draw();
-  pressurePlate.update();
+  pressurePlates.forEach((pressurePlate) => {
+    pressurePlate.update();
+  });
   lever.update();
-  trapDoor.update();
+  trapDoors.forEach((trapDoor) => {
+    trapDoor.update();
+  });
   box.update();
   player.update();
 
@@ -395,8 +414,12 @@ function animate() {
           platform.position.x -= 7;
         });
         box.position.x -= 7;
-        pressurePlate.position.x -= 7;
-        trapDoor.position.x -= 7;
+        pressurePlates.forEach((pressurePlate) => {
+          pressurePlate.position.x -= 7;
+        });
+        trapDoors.forEach((trapDoor) => {
+          trapDoor.position.x -= 7;
+        });
         lever.position.x -= 7;
         // wall.position.x -= 7;
       }
@@ -405,8 +428,12 @@ function animate() {
         platform.position.x += 7;
       });
       box.position.x += 7;
-      pressurePlate.position.x += 7;
-      trapDoor.position.x += 7;
+      pressurePlates.forEach((pressurePlate) => {
+        pressurePlate.position.x += 7;
+      });
+      trapDoors.forEach((trapDoor) => {
+        trapDoor.position.x += 7;
+      });
       lever.position.x += 7;
       // wall.position.x += 7;
     }
@@ -419,8 +446,12 @@ function animate() {
     });
     player.position.y += 2;
     box.position.y += 2;
-    pressurePlate.position.y += 2;
-    trapDoor.position.y += 2;
+    pressurePlates.forEach((pressurePlate) => {
+      pressurePlate.position.y += 2;
+    });
+    trapDoors.forEach((trapDoor) => {
+      trapDoor.position.y += 2;
+    });
     lever.position.y += 2;
     // wall.position.y += 2;
   } else if (player.position.y >= 1112) {
@@ -429,21 +460,27 @@ function animate() {
     });
     player.position.y -= 6;
     box.position.y -= 6;
-    pressurePlate.position.y -= 6;
-    trapDoor.position.y -= 6;
+    pressurePlates.forEach((pressurePlate) => {
+      pressurePlate.position.y -= 6;
+    });
+    trapDoors.forEach((trapDoor) => {
+      trapDoor.position.y -= 6;
+    });
     lever.position.y -= 6;
     // wall.position.y -= 6;
   }
 
-  if (
-    player.position.y + player.height <= trapDoor.position.y &&
-    player.position.y + player.height + player.velocity.y >= trapDoor.position.y &&
-    player.position.x + player.width >= trapDoor.position.x &&
-    player.position.x <= trapDoor.position.x + trapDoor.width &&
-    isPressurePlate1Active
-  ) {
-    player.velocity.y = 0;
-  }
+  trapDoors.forEach((trapDoor) => {
+    if (
+      player.position.y + player.height <= trapDoor.position.y &&
+      player.position.y + player.height + player.velocity.y >= trapDoor.position.y &&
+      player.position.x + player.width >= trapDoor.position.x &&
+      player.position.x <= trapDoor.position.x + trapDoor.width &&
+      isPressurePlate1Active
+    ) {
+      player.velocity.y = 0;
+    }
+  });
 
   platforms.forEach((platform) => {
     if (
@@ -481,7 +518,7 @@ function animate() {
     player.currentSprite = player.sprites.run.left;
   }
 }
-animate();
+// animate();
 
 // EventListeners
 window.addEventListener("keydown", ({ key }) => {
