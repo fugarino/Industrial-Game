@@ -296,13 +296,13 @@ const platforms = [
   new Platform({ x: 1922, y: 1200, image: platformVines }),
   new Platform({ x: 2244, y: 1200, image: platformVines }),
   new Platform({ x: 2566, y: 1200, image: platformVines }),
-  new Platform({ x: 1966, y: 900, image: platformVines }),
-  new Platform({ x: 2366, y: 1000, image: platformVines }),
+  new Platform({ x: 1266, y: 1400, image: platformVines }),
+  new Platform({ x: 945, y: 1400, image: platformVines }),
 ];
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
-const box = new Box({ x: 1800, y: 900, image: boxSprite });
+const box = new Box({ x: 1600, y: 900, image: boxSprite });
 const pressurePlate = new PressurePlate({ x: 2000, y: 1090 });
-const trapDoor = new TrapDoor({ x: 1300, y: 1065 });
+const trapDoor = new TrapDoor({ x: 1820, y: 960 });
 const lever = new Lever({ x: 2300, y: 1090 });
 
 let currentKey;
