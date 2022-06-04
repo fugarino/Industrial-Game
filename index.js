@@ -143,24 +143,25 @@ class Platform {
   }
 }
 
-class Wall {
-  constructor({ x, y, image }) {
-    this.width = image.width;
-    this.height = image.height;
-    (this.position = {
-      x: x,
-      y: y,
-    }),
-      (this.image = image);
-  }
+// class Wall {
+//   constructor({ x, y, image }) {
+//     this.width = image.width;
+//     this.height = image.height;
+//     (this.position = {
+//       x: x,
+//       y: y,
+//     }),
+//       (this.image = image);
+//   }
 
-  draw() {
-    c.drawImage(this.image, this.position.x, this.position.y);
-  }
-}
+//   draw() {
+//     c.drawImage(this.image, this.position.x, this.position.y);
+//   }
+// }
 
 class Box {
-  constructor({ x, y, image }) {
+  constructor({ x, y, image, id }) {
+    this.id = id;
     this.width = 100;
     this.height = 100;
     this.position = {
@@ -234,9 +235,10 @@ class TrapDoor {
   update() {
     this.draw();
     if (isPressurePlate1Active && this.id === 1) {
-      console.log("nope");
       this.frames = 3;
     } else if (isPressurePlate2Active && this.id === 2) {
+      this.frames = 3;
+    } else if (isPressurePlate3Active && this.id === 3) {
       this.frames = 3;
     } else {
       this.frames = 0;
@@ -284,9 +286,16 @@ const platforms = [
   new Platform({ x: 2566, y: 1200, image: platformVines }),
   new Platform({ x: 1266, y: 1400, image: platformVines }),
   new Platform({ x: 945, y: 1400, image: platformVines }),
+  new Platform({ x: 645, y: 1400, image: platformVines }),
+  new Platform({ x: 445, y: 1200, image: platformVines }),
+  new Platform({ x: 200, y: 1200, image: platformVines }),
+  new Platform({ x: -100, y: 1200, image: platformVines }),
 ];
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
-const box = new Box({ x: 1600, y: 900, image: boxSprite });
+const boxes = [
+  new Box({ x: 1600, y: 900, image: boxSprite, id: 1 }),
+  new Box({ x: 1800, y: 900, image: boxSprite, id: 2 }),
+];
 const pressurePlates = [
   new PressurePlate({ x: 2000, y: 1090, id: 1 }),
   new PressurePlate({ x: 2600, y: 1090, id: 2 }),
@@ -296,6 +305,7 @@ const pressurePlates = [
 const trapDoors = [
   new TrapDoor({ x: 1820, y: 960, id: 1 }),
   new TrapDoor({ x: 2100, y: 820, id: 2 }),
+  new TrapDoor({ x: 2400, y: 820, id: 3 }),
 ];
 const lever = new Lever({ x: 2300, y: 1090 });
 
@@ -330,7 +340,9 @@ function animate() {
   trapDoors.forEach((trapDoor) => {
     trapDoor.update();
   });
-  box.update();
+  boxes.forEach((box) => {
+    box.update();
+  });
   player.update();
 
   let pushingBoxRight = false;
@@ -342,8 +354,10 @@ function animate() {
       (player.position.x + player.width >= pressurePlate.position.x &&
         player.position.x <= pressurePlate.position.x + pressurePlate.width &&
         player.position.y >= pressurePlate.position.y) ||
-      (box.position.x + box.width >= pressurePlate.position.x &&
-        box.position.x <= pressurePlate.position.x + pressurePlate.width)
+      (boxes[0].position.x + boxes[0].width >= pressurePlate.position.x &&
+        boxes[0].position.x <= pressurePlate.position.x + pressurePlate.width) ||
+      (boxes[1].position.x + boxes[1].width >= pressurePlate.position.x &&
+        boxes[1].position.x <= pressurePlate.position.x + pressurePlate.width)
     ) {
       if (pressurePlate.id === 1) {
         isPressurePlate1Active = true;
@@ -369,47 +383,34 @@ function animate() {
     }
   });
 
-  // Wall Collision
-  // if (
-  //   player.position.x + player.width >= wall.position.x &&
-  //   player.position.x <= wall.position.x &&
-  //   keys.right.pressed
-  // ) {
-  //   collidingWall = true;
-  //   player.velocity.x = 0;
-  // }
-
   // Box Collision
-  if (
-    player.position.y + player.height <= box.position.y &&
-    player.position.y + player.height + player.velocity.y >= box.position.y &&
-    player.position.x + player.width >= box.position.x &&
-    player.position.x <= box.position.x + box.width
-  ) {
-    player.velocity.y = 0;
-  } else if (
-    player.position.x + player.width >= box.position.x &&
-    player.position.x <= box.position.x &&
-    player.position.y + player.height >= box.position.y &&
-    player.position.y <= box.position.y + box.height &&
-    keys.right.pressed
-  ) {
-    // if (wall.position.x < 1710) {
-    //   box.position.x += 0;
-    // } else {
-    //   box.position.x += 7;
-    // }
-    box.position.x += 7;
-    pushingBoxRight = true;
-  } else if (
-    player.position.x <= box.position.x + box.width &&
-    player.position.x >= box.position.x &&
-    player.position.y + player.height >= box.position.y &&
-    keys.left.pressed
-  ) {
-    box.position.x -= 7;
-    pushingBoxLeft = true;
-  }
+  boxes.forEach((box) => {
+    if (
+      player.position.y + player.height <= box.position.y &&
+      player.position.y + player.height + player.velocity.y >= box.position.y &&
+      player.position.x + player.width >= box.position.x &&
+      player.position.x <= box.position.x + box.width
+    ) {
+      player.velocity.y = 0;
+    } else if (
+      player.position.x + player.width >= box.position.x &&
+      player.position.x <= box.position.x &&
+      player.position.y + player.height >= box.position.y &&
+      player.position.y <= box.position.y + box.height &&
+      keys.right.pressed
+    ) {
+      box.position.x += 7;
+      pushingBoxRight = true;
+    } else if (
+      player.position.x <= box.position.x + box.width &&
+      player.position.x >= box.position.x &&
+      player.position.y + player.height >= box.position.y &&
+      keys.left.pressed
+    ) {
+      box.position.x -= 7;
+      pushingBoxLeft = true;
+    }
+  });
 
   // X-Axis Platform Displacement
   if (keys.right.pressed && player.position.x < 1500) {
@@ -424,7 +425,9 @@ function animate() {
         platforms.forEach((platform) => {
           platform.position.x -= 7;
         });
-        box.position.x -= 7;
+        boxes.forEach((box) => {
+          box.position.x -= 7;
+        });
         pressurePlates.forEach((pressurePlate) => {
           pressurePlate.position.x -= 7;
         });
@@ -438,7 +441,9 @@ function animate() {
       platforms.forEach((platform) => {
         platform.position.x += 7;
       });
-      box.position.x += 7;
+      boxes.forEach((box) => {
+        box.position.x += 7;
+      });
       pressurePlates.forEach((pressurePlate) => {
         pressurePlate.position.x += 7;
       });
@@ -456,7 +461,9 @@ function animate() {
       platform.position.y += 2;
     });
     player.position.y += 2;
-    box.position.y += 2;
+    boxes.forEach((box) => {
+      box.position.y += 2;
+    });
     pressurePlates.forEach((pressurePlate) => {
       pressurePlate.position.y += 2;
     });
@@ -470,7 +477,9 @@ function animate() {
       platform.position.y -= 6;
     });
     player.position.y -= 6;
-    box.position.y -= 6;
+    boxes.forEach((box) => {
+      box.position.y -= 6;
+    });
     pressurePlates.forEach((pressurePlate) => {
       pressurePlate.position.y -= 6;
     });
@@ -500,6 +509,15 @@ function animate() {
       trapDoor.id === 2
     ) {
       player.velocity.y = 0;
+    } else if (
+      player.position.y + player.height <= trapDoor.position.y &&
+      player.position.y + player.height + player.velocity.y >= trapDoor.position.y &&
+      player.position.x + player.width >= trapDoor.position.x &&
+      player.position.x <= trapDoor.position.x + trapDoor.width &&
+      isPressurePlate3Active &&
+      trapDoor.id === 3
+    ) {
+      player.velocity.y = 0;
     }
   });
 
@@ -514,14 +532,16 @@ function animate() {
     }
   });
   platforms.forEach((platform) => {
-    if (
-      box.position.y + box.height <= platform.position.y &&
-      box.position.y + box.height + box.velocity.y + 12 >= platform.position.y &&
-      box.position.x + box.width >= platform.position.x &&
-      box.position.x <= platform.position.x + platform.width
-    ) {
-      box.velocity.y = 0;
-    }
+    boxes.forEach((box) => {
+      if (
+        box.position.y + box.height <= platform.position.y &&
+        box.position.y + box.height + box.velocity.y + 12 >= platform.position.y &&
+        box.position.x + box.width >= platform.position.x &&
+        box.position.x <= platform.position.x + platform.width
+      ) {
+        box.velocity.y = 0;
+      }
+    });
   });
 
   // Changing Animations
@@ -539,7 +559,7 @@ function animate() {
     player.currentSprite = player.sprites.run.left;
   }
 }
-animate();
+// animate();
 
 // EventListeners
 window.addEventListener("keydown", ({ key }) => {
@@ -559,12 +579,6 @@ window.addEventListener("keydown", ({ key }) => {
       keys.right.pressed = true;
       currentKey = "right";
       break;
-    // case "e":
-    //   if (leverPressed) {
-    //     leverPressed = false;
-    //   } else {
-    //     leverPressed = true;
-    //   }
   }
 });
 
