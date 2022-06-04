@@ -602,10 +602,10 @@ function animate() {
 animate();
 
 // EventListeners
-window.addEventListener("keydown", ({ key }) => {
-  switch (key) {
+window.addEventListener("keydown", (e) => {
+  switch (e.key) {
     case "w": // Up
-      if (player.velocity.y === 0) player.velocity.y = -12;
+      if (player.velocity.y === 0 && !e.repeat) player.velocity.y = -12;
       keys.up.pressed = true;
       break;
     case "s": // Down
