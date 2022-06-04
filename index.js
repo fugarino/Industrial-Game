@@ -694,7 +694,7 @@ window.addEventListener("keydown", ({ key }) => {
     !leverPressed3
   ) {
     console.log("i");
-    levers[2].image = leverLeftSprite;
+    levers[2].image = leverRightSprite;
     leverPressed3 = true;
   } else if (
     key === "e" &&
@@ -704,7 +704,7 @@ window.addEventListener("keydown", ({ key }) => {
     leverPressed3
   ) {
     console.log("no");
-    levers[2].image = leverRightSprite;
+    levers[2].image = leverLeftSprite;
     leverPressed3 = false;
   }
   // Lever 4
