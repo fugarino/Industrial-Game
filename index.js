@@ -152,22 +152,6 @@ class Platform {
   }
 }
 
-// class Wall {
-//   constructor({ x, y, image }) {
-//     this.width = image.width;
-//     this.height = image.height;
-//     (this.position = {
-//       x: x,
-//       y: y,
-//     }),
-//       (this.image = image);
-//   }
-
-//   draw() {
-//     c.drawImage(this.image, this.position.x, this.position.y);
-//   }
-// }
-
 class Box {
   constructor({ x, y, image, id }) {
     this.id = id;
@@ -599,7 +583,7 @@ function animate() {
     player.currentSprite = player.sprites.run.left;
   }
 }
-animate();
+// animate();
 
 // EventListeners
 window.addEventListener("keydown", (e) => {
