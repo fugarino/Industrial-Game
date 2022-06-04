@@ -283,16 +283,18 @@ const platforms = [
   new Platform({ x: 1922, y: 1200, image: platformVines }),
   new Platform({ x: 2244, y: 1200, image: platformVines }),
   new Platform({ x: 2566, y: 1200, image: platformVines }),
-  new Platform({ x: 1266, y: 1400, image: platformVines }),
-  new Platform({ x: 945, y: 1400, image: platformVines }),
-  new Platform({ x: 645, y: 1400, image: platformVines }),
-  new Platform({ x: 345, y: 1400, image: platformVines }),
+  new Platform({ x: 1266, y: 1450, image: platformVines }),
+  new Platform({ x: 945, y: 1450, image: platformVines }),
+  new Platform({ x: 645, y: 1450, image: platformVines }),
+  new Platform({ x: 345, y: 1450, image: platformVines }),
   new Platform({ x: 445, y: 1200, image: platformVines }),
   new Platform({ x: 200, y: 1200, image: platformVines }),
   new Platform({ x: -100, y: 1200, image: platformVines }),
   new Platform({ x: 2400, y: 700, image: platformVines }),
   new Platform({ x: 2566, y: 700, image: platformVines }),
-  new Platform({ x: 1566, y: 1600, image: platformVines }),
+  new Platform({ x: 1566, y: 1700, image: platformVines }),
+  new Platform({ x: 1266, y: 1700, image: platformVines }),
+  new Platform({ x: 966, y: 1700, image: platformVines }),
 ];
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
 const boxes = [
@@ -303,7 +305,7 @@ const boxes = [
 const pressurePlates = [
   new PressurePlate({ x: 2410, y: 1090, id: 1 }),
   new PressurePlate({ x: 2600, y: 1090, id: 2 }),
-  new PressurePlate({ x: 2790, y: 1090, id: 3 }),
+  new PressurePlate({ x: 1450, y: 1588, id: 3 }),
 ];
 // const pressurePlate = new PressurePlate({ x: 2000, y: 1090 });
 const trapDoors = [
@@ -318,10 +320,10 @@ const trapDoors = [
   new TrapDoor({ x: 1300, y: 620, id: 6, image: trapDoorOpen }),
 ];
 const levers = [
-  new Lever({ x: 460, y: 1289, image: leverLeftSprite }),
+  new Lever({ x: 460, y: 1338, image: leverLeftSprite }),
   new Lever({ x: 200, y: 1090, image: leverLeftSprite }),
   new Lever({ x: 400, y: 1090, image: leverRightSprite }),
-  new Lever({ x: 600, y: 1090, image: leverRightSprite }),
+  new Lever({ x: 1100, y: 1588, image: leverRightSprite }),
 ];
 const end = new End({ x: 2700, y: 587 });
 
@@ -372,9 +374,12 @@ function animate() {
     if (
       (player.position.x + player.width >= pressurePlate.position.x &&
         player.position.x <= pressurePlate.position.x + pressurePlate.width &&
-        player.position.y >= pressurePlate.position.y) ||
+        player.position.y >= pressurePlate.position.y &&
+        player.position.y <= pressurePlate.position.y + pressurePlate.height) ||
       (boxes[0].position.x + boxes[0].width >= pressurePlate.position.x &&
-        boxes[0].position.x <= pressurePlate.position.x + pressurePlate.width) ||
+        boxes[0].position.x <= pressurePlate.position.x + pressurePlate.width &&
+        boxes[0].position.y <= pressurePlate.position.y &&
+        boxes[0].position.y + boxes[0].height >= pressurePlate.position.y) ||
       (boxes[1].position.x + boxes[1].width >= pressurePlate.position.x &&
         boxes[1].position.x <= pressurePlate.position.x + pressurePlate.width) ||
       (boxes[2].position.x + boxes[1].width >= pressurePlate.position.x &&
