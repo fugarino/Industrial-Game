@@ -48,6 +48,12 @@ trapDoorClosed.src = "./img/TrapDoorClosed.png";
 const trapDoorOpen = new Image();
 trapDoorOpen.src = "./img/TrapDoorOpen.png";
 
+const endOff = new Image();
+endOff.src = "./img/Off.png";
+
+const endOn = new Image();
+endOn.src = "./img/On.png";
+
 // Active
 let isPressurePlate1Active = false;
 let isPressurePlate2Active = false;
@@ -250,9 +256,29 @@ class Lever {
   }
 }
 
+class End {
+  constructor({ x, y }) {
+    this.width = 112;
+    this.height = 112;
+    this.position = {
+      x: x,
+      y: y,
+    };
+    this.image = {
+      on: endOn,
+      off: endOff,
+    };
+    this.currentImage = this.image.off;
+  }
+
+  draw() {
+    c.drawImage(this.currentImage, this.position.x, this.position.y);
+  }
+}
+
 const player = new Player();
 const platforms = [
-  new Platform({ x: 1278, y: 1200, image: platformVines }),
+  new Platform({ x: 1378, y: 1200, image: platformVines }),
   new Platform({ x: 1600, y: 1200, image: platformVines }),
   new Platform({ x: 1922, y: 1200, image: platformVines }),
   new Platform({ x: 2244, y: 1200, image: platformVines }),
@@ -260,9 +286,13 @@ const platforms = [
   new Platform({ x: 1266, y: 1400, image: platformVines }),
   new Platform({ x: 945, y: 1400, image: platformVines }),
   new Platform({ x: 645, y: 1400, image: platformVines }),
+  new Platform({ x: 345, y: 1400, image: platformVines }),
   new Platform({ x: 445, y: 1200, image: platformVines }),
   new Platform({ x: 200, y: 1200, image: platformVines }),
   new Platform({ x: -100, y: 1200, image: platformVines }),
+  new Platform({ x: 2400, y: 700, image: platformVines }),
+  new Platform({ x: 2566, y: 700, image: platformVines }),
+  new Platform({ x: 1566, y: 1600, image: platformVines }),
 ];
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
 const boxes = [
@@ -288,11 +318,12 @@ const trapDoors = [
   new TrapDoor({ x: 1300, y: 620, id: 6, image: trapDoorOpen }),
 ];
 const levers = [
-  new Lever({ x: 0, y: 1090, image: leverLeftSprite }),
+  new Lever({ x: 460, y: 1289, image: leverLeftSprite }),
   new Lever({ x: 200, y: 1090, image: leverLeftSprite }),
   new Lever({ x: 400, y: 1090, image: leverRightSprite }),
   new Lever({ x: 600, y: 1090, image: leverRightSprite }),
 ];
+const end = new End({ x: 2700, y: 587 });
 
 let currentKey;
 const keys = {
@@ -318,6 +349,7 @@ function animate() {
   });
   // wall.draw();
   // box.draw();
+  end.draw();
   pressurePlates.forEach((pressurePlate) => {
     pressurePlate.draw();
   });
@@ -394,6 +426,7 @@ function animate() {
       player.position.x <= box.position.x + box.width &&
       player.position.x >= box.position.x &&
       player.position.y + player.height >= box.position.y &&
+      player.position.y <= box.position.y + box.height &&
       keys.left.pressed
     ) {
       box.position.x -= 7;
@@ -426,6 +459,7 @@ function animate() {
         levers.forEach((lever) => {
           lever.position.x -= 7;
         });
+        end.position.x -= 7;
         // wall.position.x -= 7;
       }
     } else if (keys.left.pressed) {
@@ -444,6 +478,7 @@ function animate() {
       levers.forEach((lever) => {
         lever.position.x += 7;
       });
+      end.position.x += 7;
       // wall.position.x += 7;
     }
   }
@@ -466,6 +501,7 @@ function animate() {
     levers.forEach((lever) => {
       lever.position.y += 2;
     });
+    end.position.y += 2;
     // wall.position.y += 2;
   } else if (player.position.y >= 1112) {
     platforms.forEach((platform) => {
@@ -484,6 +520,7 @@ function animate() {
     levers.forEach((lever) => {
       lever.position.y -= 6;
     });
+    end.position.y -= 6;
     // wall.position.y -= 6;
   }
 
@@ -583,7 +620,7 @@ function animate() {
     player.currentSprite = player.sprites.run.left;
   }
 }
-// animate();
+animate();
 
 // EventListeners
 window.addEventListener("keydown", (e) => {
