@@ -381,9 +381,13 @@ function animate() {
         boxes[0].position.y <= pressurePlate.position.y &&
         boxes[0].position.y + boxes[0].height >= pressurePlate.position.y) ||
       (boxes[1].position.x + boxes[1].width >= pressurePlate.position.x &&
-        boxes[1].position.x <= pressurePlate.position.x + pressurePlate.width) ||
+        boxes[1].position.x <= pressurePlate.position.x + pressurePlate.width &&
+        boxes[1].position.y <= pressurePlate.position.y &&
+        boxes[1].position.y + boxes[1].height >= pressurePlate.position.y) ||
       (boxes[2].position.x + boxes[1].width >= pressurePlate.position.x &&
-        boxes[2].position.x <= pressurePlate.position.x + pressurePlate.width)
+        boxes[2].position.x <= pressurePlate.position.x + pressurePlate.width &&
+        boxes[2].position.y <= pressurePlate.position.y &&
+        boxes[2].position.y + boxes[2].height >= pressurePlate.position.y)
     ) {
       if (pressurePlate.id === 1) {
         isPressurePlate1Active = true;
