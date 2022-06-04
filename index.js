@@ -311,7 +311,7 @@ const pressurePlates = [
 const trapDoors = [
   new TrapDoor({ x: 1820, y: 960, id: 1, image: trapDoorClosed }),
   new TrapDoor({ x: 2100, y: 820, id: 2, image: trapDoorClosed }),
-  new TrapDoor({ x: 2400, y: 820, id: 3, image: trapDoorClosed }),
+  new TrapDoor({ x: 1200, y: 1320, id: 3, image: trapDoorClosed }),
   new TrapDoor({ x: 600, y: 620, id: 4, image: trapDoorClosed }),
   new TrapDoor({ x: 800, y: 620, id: 4, image: trapDoorClosed }),
   new TrapDoor({ x: 100, y: 620, id: 5, image: trapDoorClosed }),
