@@ -42,11 +42,20 @@ leverRightSprite.src = "./img/LeverRight.png";
 const leverLeftSprite = new Image();
 leverLeftSprite.src = "./img/LeverLeft.png";
 
+const trapDoorClosed = new Image();
+trapDoorClosed.src = "./img/TrapDoorClosed.png";
+
+const trapDoorOpen = new Image();
+trapDoorOpen.src = "./img/TrapDoorOpen.png";
+
 // Active
 let isPressurePlate1Active = false;
 let isPressurePlate2Active = false;
 let isPressurePlate3Active = false;
-let leverPressed = false;
+let leverPressed1 = false;
+let leverPressed2 = false;
+let leverPressed3 = true;
+let leverPressed4 = false;
 
 class Player {
   constructor() {
@@ -206,74 +215,54 @@ class PressurePlate {
 }
 
 class TrapDoor {
-  constructor({ x, y, id }) {
+  constructor({ x, y, id, image }) {
     this.id = id;
     this.width = 112;
     this.height = 112;
-    this.frames = 0;
     this.position = {
       x: x,
       y: y,
     };
-    this.sprite = trapDoorDownToUpSprite;
+    this.image = image;
   }
 
   draw() {
-    c.drawImage(
-      this.sprite,
-      112 * this.frames,
-      0,
-      112,
-      112,
-      this.position.x,
-      this.position.y,
-      this.width,
-      this.height
-    );
+    c.drawImage(this.image, this.position.x, this.position.y);
   }
 
   update() {
     this.draw();
     if (isPressurePlate1Active && this.id === 1) {
-      this.frames = 3;
+      this.image = trapDoorOpen;
     } else if (isPressurePlate2Active && this.id === 2) {
-      this.frames = 3;
+      this.image = trapDoorOpen;
     } else if (isPressurePlate3Active && this.id === 3) {
-      this.frames = 3;
+      this.image = trapDoorOpen;
+    } else if (leverPressed1 && this.id === 4) {
+      this.image = trapDoorOpen;
+    } else if (leverPressed2 && this.id === 5) {
+      this.image = trapDoorOpen;
+    } else if (leverPressed3 && this.id === 6) {
+      this.image = trapDoorOpen;
     } else {
-      this.frames = 0;
+      this.image = trapDoorClosed;
     }
   }
 }
 
 class Lever {
-  constructor({ x, y }) {
+  constructor({ x, y, image }) {
     this.width = 112;
     this.height = 112;
     this.position = {
       x: x,
       y: y,
     };
-    this.sprites = {
-      right: leverRightSprite,
-      left: leverLeftSprite,
-    };
-    this.currentSprite = this.sprites.right;
+    this.image = image;
   }
 
   draw() {
-    c.drawImage(this.currentSprite, this.position.x, this.position.y);
-  }
-
-  update() {
-    if (leverPressed) {
-      this.currentSprite = this.sprites.left;
-      // isPressurePlate1Active = true;
-    } else {
-      this.currentSprite = this.sprites.right;
-      // isPressurePlate1Active = false;
-    }
-    this.draw();
+    c.drawImage(this.image, this.position.x, this.position.y);
   }
 }
 
@@ -295,19 +284,31 @@ const platforms = [
 const boxes = [
   new Box({ x: 1600, y: 900, image: boxSprite, id: 1 }),
   new Box({ x: 1800, y: 900, image: boxSprite, id: 2 }),
+  new Box({ x: 2000, y: 900, image: boxSprite, id: 2 }),
 ];
 const pressurePlates = [
-  new PressurePlate({ x: 2000, y: 1090, id: 1 }),
+  new PressurePlate({ x: 2410, y: 1090, id: 1 }),
   new PressurePlate({ x: 2600, y: 1090, id: 2 }),
   new PressurePlate({ x: 2790, y: 1090, id: 3 }),
 ];
 // const pressurePlate = new PressurePlate({ x: 2000, y: 1090 });
 const trapDoors = [
-  new TrapDoor({ x: 1820, y: 960, id: 1 }),
-  new TrapDoor({ x: 2100, y: 820, id: 2 }),
-  new TrapDoor({ x: 2400, y: 820, id: 3 }),
+  new TrapDoor({ x: 1820, y: 960, id: 1, image: trapDoorClosed }),
+  new TrapDoor({ x: 2100, y: 820, id: 2, image: trapDoorClosed }),
+  new TrapDoor({ x: 2400, y: 820, id: 3, image: trapDoorClosed }),
+  new TrapDoor({ x: 600, y: 620, id: 4, image: trapDoorClosed }),
+  new TrapDoor({ x: 800, y: 620, id: 4, image: trapDoorClosed }),
+  new TrapDoor({ x: 100, y: 620, id: 5, image: trapDoorClosed }),
+  new TrapDoor({ x: 300, y: 620, id: 5, image: trapDoorClosed }),
+  new TrapDoor({ x: 1100, y: 620, id: 6, image: trapDoorOpen }),
+  new TrapDoor({ x: 1300, y: 620, id: 6, image: trapDoorOpen }),
 ];
-const lever = new Lever({ x: 2300, y: 1090 });
+const levers = [
+  new Lever({ x: 0, y: 1090, image: leverLeftSprite }),
+  new Lever({ x: 200, y: 1090, image: leverLeftSprite }),
+  new Lever({ x: 400, y: 1090, image: leverRightSprite }),
+  new Lever({ x: 600, y: 1090, image: leverRightSprite }),
+];
 
 let currentKey;
 const keys = {
@@ -336,7 +337,9 @@ function animate() {
   pressurePlates.forEach((pressurePlate) => {
     pressurePlate.draw();
   });
-  lever.update();
+  levers.forEach((lever) => {
+    lever.draw();
+  });
   trapDoors.forEach((trapDoor) => {
     trapDoor.update();
   });
@@ -357,7 +360,9 @@ function animate() {
       (boxes[0].position.x + boxes[0].width >= pressurePlate.position.x &&
         boxes[0].position.x <= pressurePlate.position.x + pressurePlate.width) ||
       (boxes[1].position.x + boxes[1].width >= pressurePlate.position.x &&
-        boxes[1].position.x <= pressurePlate.position.x + pressurePlate.width)
+        boxes[1].position.x <= pressurePlate.position.x + pressurePlate.width) ||
+      (boxes[2].position.x + boxes[1].width >= pressurePlate.position.x &&
+        boxes[2].position.x <= pressurePlate.position.x + pressurePlate.width)
     ) {
       if (pressurePlate.id === 1) {
         isPressurePlate1Active = true;
@@ -434,7 +439,9 @@ function animate() {
         trapDoors.forEach((trapDoor) => {
           trapDoor.position.x -= 7;
         });
-        lever.position.x -= 7;
+        levers.forEach((lever) => {
+          lever.position.x -= 7;
+        });
         // wall.position.x -= 7;
       }
     } else if (keys.left.pressed) {
@@ -450,7 +457,9 @@ function animate() {
       trapDoors.forEach((trapDoor) => {
         trapDoor.position.x += 7;
       });
-      lever.position.x += 7;
+      levers.forEach((lever) => {
+        lever.position.x += 7;
+      });
       // wall.position.x += 7;
     }
   }
@@ -470,7 +479,9 @@ function animate() {
     trapDoors.forEach((trapDoor) => {
       trapDoor.position.y += 2;
     });
-    lever.position.y += 2;
+    levers.forEach((lever) => {
+      lever.position.y += 2;
+    });
     // wall.position.y += 2;
   } else if (player.position.y >= 1112) {
     platforms.forEach((platform) => {
@@ -486,7 +497,9 @@ function animate() {
     trapDoors.forEach((trapDoor) => {
       trapDoor.position.y -= 6;
     });
-    lever.position.y -= 6;
+    levers.forEach((lever) => {
+      lever.position.y -= 6;
+    });
     // wall.position.y -= 6;
   }
 
@@ -516,6 +529,33 @@ function animate() {
       player.position.x <= trapDoor.position.x + trapDoor.width &&
       isPressurePlate3Active &&
       trapDoor.id === 3
+    ) {
+      player.velocity.y = 0;
+    } else if (
+      player.position.y + player.height <= trapDoor.position.y &&
+      player.position.y + player.height + player.velocity.y >= trapDoor.position.y &&
+      player.position.x + player.width >= trapDoor.position.x &&
+      player.position.x <= trapDoor.position.x + trapDoor.width &&
+      leverPressed1 &&
+      trapDoor.id === 4
+    ) {
+      player.velocity.y = 0;
+    } else if (
+      player.position.y + player.height <= trapDoor.position.y &&
+      player.position.y + player.height + player.velocity.y >= trapDoor.position.y &&
+      player.position.x + player.width >= trapDoor.position.x &&
+      player.position.x <= trapDoor.position.x + trapDoor.width &&
+      leverPressed2 &&
+      trapDoor.id === 5
+    ) {
+      player.velocity.y = 0;
+    } else if (
+      player.position.y + player.height <= trapDoor.position.y &&
+      player.position.y + player.height + player.velocity.y >= trapDoor.position.y &&
+      player.position.x + player.width >= trapDoor.position.x &&
+      player.position.x <= trapDoor.position.x + trapDoor.width &&
+      leverPressed3 &&
+      trapDoor.id === 6
     ) {
       player.velocity.y = 0;
     }
@@ -559,7 +599,7 @@ function animate() {
     player.currentSprite = player.sprites.run.left;
   }
 }
-// animate();
+animate();
 
 // EventListeners
 window.addEventListener("keydown", ({ key }) => {
@@ -602,21 +642,91 @@ window.addEventListener("keyup", ({ key }) => {
 });
 
 window.addEventListener("keydown", ({ key }) => {
+  // Lever 1
   if (
     key === "e" &&
-    player.position.x + player.width >= lever.position.x &&
-    player.position.x <= lever.position.x + lever.width &&
-    player.position.y >= lever.position.y &&
-    !leverPressed
+    player.position.x + player.width >= levers[0].position.x &&
+    player.position.x <= levers[0].position.x + levers[0].width &&
+    player.position.y >= levers[0].position.y &&
+    !leverPressed1
   ) {
-    leverPressed = true;
+    console.log("hi");
+    levers[0].image = leverRightSprite;
+    leverPressed1 = true;
   } else if (
     key === "e" &&
-    player.position.x + player.width >= lever.position.x &&
-    player.position.x <= lever.position.x + lever.width &&
-    player.position.y >= lever.position.y &&
-    leverPressed
+    player.position.x + player.width >= levers[0].position.x &&
+    player.position.x <= levers[0].position.x + levers[0].width &&
+    player.position.y >= levers[0].position.y &&
+    leverPressed1
   ) {
-    leverPressed = false;
+    levers[0].image = leverLeftSprite;
+    leverPressed1 = false;
+  }
+  // Lever 2
+  if (
+    key === "e" &&
+    player.position.x + player.width >= levers[1].position.x &&
+    player.position.x <= levers[1].position.x + levers[1].width &&
+    player.position.y >= levers[1].position.y &&
+    !leverPressed2
+  ) {
+    console.log("i");
+    levers[1].image = leverRightSprite;
+    leverPressed2 = true;
+  } else if (
+    key === "e" &&
+    player.position.x + player.width >= levers[1].position.x &&
+    player.position.x <= levers[1].position.x + levers[1].width &&
+    player.position.y >= levers[1].position.y &&
+    leverPressed2
+  ) {
+    console.log("no");
+    levers[1].image = leverLeftSprite;
+    leverPressed2 = false;
+  }
+  // Lever 3
+  if (
+    key === "e" &&
+    player.position.x + player.width >= levers[2].position.x &&
+    player.position.x <= levers[2].position.x + levers[2].width &&
+    player.position.y >= levers[2].position.y &&
+    !leverPressed3
+  ) {
+    console.log("i");
+    levers[2].image = leverLeftSprite;
+    leverPressed3 = true;
+  } else if (
+    key === "e" &&
+    player.position.x + player.width >= levers[2].position.x &&
+    player.position.x <= levers[2].position.x + levers[2].width &&
+    player.position.y >= levers[2].position.y &&
+    leverPressed3
+  ) {
+    console.log("no");
+    levers[2].image = leverRightSprite;
+    leverPressed3 = false;
+  }
+  // Lever 4
+  if (
+    key === "e" &&
+    player.position.x + player.width >= levers[3].position.x &&
+    player.position.x <= levers[3].position.x + levers[3].width &&
+    player.position.y >= levers[3].position.y &&
+    !leverPressed4
+  ) {
+    console.log("i");
+    levers[3].image = leverLeftSprite;
+    leverPressed4 = true;
+  } else if (
+    key === "e" &&
+    player.position.x + player.width >= levers[3].position.x &&
+    player.position.x <= levers[3].position.x + levers[3].width &&
+    player.position.y >= levers[3].position.y &&
+    leverPressed4
+  ) {
+    console.log("no");
+    levers[3].image = leverRightSprite;
+    leverPressed4 = false;
   }
 });
