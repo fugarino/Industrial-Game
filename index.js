@@ -67,8 +67,8 @@ class Player {
   constructor() {
     this.position = {
       x: 1460,
-      y: 100,
-      // y: 700,
+      // y: 100,
+      y: 700,
     };
 
     this.velocity = {
@@ -288,9 +288,10 @@ const platforms = [
   new Platform({ x: 945, y: 1450, image: platformVines }),
   new Platform({ x: 645, y: 1450, image: platformVines }),
   new Platform({ x: 345, y: 1450, image: platformVines }),
-  new Platform({ x: 445, y: 1200, image: platformVines }),
-  new Platform({ x: 200, y: 1200, image: platformVines }),
-  new Platform({ x: -100, y: 1200, image: platformVines }),
+  new Platform({ x: 310, y: 1200, image: platformVines }),
+  new Platform({ x: 0, y: 1200, image: platformVines }),
+  new Platform({ x: -600, y: 1200, image: platformVines }),
+  new Platform({ x: -300, y: 1200, image: platformVines }),
   new Platform({ x: 2400, y: 700, image: platformVines }),
   new Platform({ x: 2566, y: 700, image: platformVines }),
   new Platform({ x: 1566, y: 1700, image: platformVines }),
@@ -303,16 +304,20 @@ const platforms = [
   new Platform({ x: 1174, y: 450, image: platformVines }),
   new Platform({ x: 2420, y: 260, image: platformVines }),
   new Platform({ x: 2220, y: 260, image: platformVines }),
+  new Platform({ x: -400, y: 850, image: platformVines }),
+  new Platform({ x: -750, y: 650, image: platformVines }),
+  new Platform({ x: -900, y: 550, image: platformVines }),
+  new Platform({ x: -50, y: 280, image: platformVines }),
 ];
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
 const boxes = [
   new Box({ x: 1600, y: 900, image: boxSprite, id: 1 }),
   new Box({ x: 1800, y: 100, image: boxSprite, id: 2 }),
-  new Box({ x: 2000, y: 900, image: boxSprite, id: 2 }),
+  new Box({ x: 400, y: 900, image: boxSprite, id: 2 }),
 ];
 const pressurePlates = [
-  new PressurePlate({ x: 2410, y: 1090, id: 1 }),
-  new PressurePlate({ x: 2600, y: 1090, id: 2 }),
+  new PressurePlate({ x: 2070, y: 1090, id: 1 }),
+  new PressurePlate({ x: -450, y: 1090, id: 2 }),
   new PressurePlate({ x: 1450, y: 1588, id: 3 }),
 ];
 // const pressurePlate = new PressurePlate({ x: 2000, y: 1090 });
@@ -320,16 +325,16 @@ const trapDoors = [
   new TrapDoor({ x: 1820, y: 960, id: 1, image: trapDoorClosed }),
   new TrapDoor({ x: 2100, y: 820, id: 2, image: trapDoorClosed }),
   new TrapDoor({ x: 1200, y: 1320, id: 3, image: trapDoorClosed }),
-  new TrapDoor({ x: 600, y: 620, id: 4, image: trapDoorClosed }),
-  new TrapDoor({ x: 800, y: 620, id: 4, image: trapDoorClosed }),
-  new TrapDoor({ x: 100, y: 620, id: 5, image: trapDoorClosed }),
-  new TrapDoor({ x: 300, y: 620, id: 5, image: trapDoorClosed }),
+  new TrapDoor({ x: -400, y: 720, id: 4, image: trapDoorClosed }),
+  new TrapDoor({ x: 50, y: 960, id: 4, image: trapDoorClosed }),
+  new TrapDoor({ x: 600, y: 280, id: 5, image: trapDoorClosed }),
+  new TrapDoor({ x: -350, y: 420, id: 5, image: trapDoorClosed }),
   new TrapDoor({ x: 1523, y: 450, id: 6, image: trapDoorOpen }),
   new TrapDoor({ x: 1643, y: 450, id: 6, image: trapDoorOpen }),
 ];
 const levers = [
   new Lever({ x: 460, y: 1338, image: leverLeftSprite }),
-  new Lever({ x: 200, y: 1090, image: leverLeftSprite }),
+  new Lever({ x: -800, y: 440, image: leverLeftSprite }),
   new Lever({ x: 2600, y: 145, image: leverRightSprite }),
   new Lever({ x: 1100, y: 1588, image: leverRightSprite }),
 ];
@@ -650,7 +655,7 @@ function animate() {
     player.currentSprite = player.sprites.run.left;
   }
 }
-animate();
+// animate();
 
 // EventListeners
 window.addEventListener("keydown", (e) => {
