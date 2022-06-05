@@ -62,6 +62,7 @@ let leverPressed1 = false;
 let leverPressed2 = false;
 let leverPressed3 = true;
 let leverPressed4 = false;
+let endPressed = false;
 
 class Player {
   constructor() {
@@ -335,7 +336,7 @@ const trapDoors = [
 const levers = [
   new Lever({ x: 460, y: 1338, image: leverLeftSprite }),
   new Lever({ x: -800, y: 440, image: leverLeftSprite }),
-  new Lever({ x: 2600, y: 145, image: leverRightSprite }),
+  new Lever({ x: 2400, y: 145, image: leverRightSprite }),
   new Lever({ x: 1100, y: 1588, image: leverRightSprite }),
 ];
 const end = new End({ x: 2700, y: 587 });
@@ -382,6 +383,12 @@ function animate() {
   let pushingBoxRight = false;
   let pushingBoxLeft = false;
   let collidingWall = false;
+
+  if (leverPressed4) {
+    end.currentImage = end.image.on;
+  } else {
+    end.currentImage = end.image.off;
+  }
 
   pressurePlates.forEach((pressurePlate) => {
     if (
@@ -655,7 +662,7 @@ function animate() {
     player.currentSprite = player.sprites.run.left;
   }
 }
-// animate();
+animate();
 
 // EventListeners
 window.addEventListener("keydown", (e) => {
@@ -706,7 +713,6 @@ window.addEventListener("keydown", ({ key }) => {
     player.position.y >= levers[0].position.y &&
     !leverPressed1
   ) {
-    console.log("hi");
     levers[0].image = leverRightSprite;
     leverPressed1 = true;
   } else if (
@@ -727,7 +733,6 @@ window.addEventListener("keydown", ({ key }) => {
     player.position.y >= levers[1].position.y &&
     !leverPressed2
   ) {
-    console.log("i");
     levers[1].image = leverRightSprite;
     leverPressed2 = true;
   } else if (
@@ -737,7 +742,6 @@ window.addEventListener("keydown", ({ key }) => {
     player.position.y >= levers[1].position.y &&
     leverPressed2
   ) {
-    console.log("no");
     levers[1].image = leverLeftSprite;
     leverPressed2 = false;
   }
@@ -749,7 +753,6 @@ window.addEventListener("keydown", ({ key }) => {
     player.position.y >= levers[2].position.y &&
     !leverPressed3
   ) {
-    console.log("i");
     levers[2].image = leverRightSprite;
     leverPressed3 = true;
   } else if (
@@ -759,7 +762,6 @@ window.addEventListener("keydown", ({ key }) => {
     player.position.y >= levers[2].position.y &&
     leverPressed3
   ) {
-    console.log("no");
     levers[2].image = leverLeftSprite;
     leverPressed3 = false;
   }
@@ -771,7 +773,6 @@ window.addEventListener("keydown", ({ key }) => {
     player.position.y >= levers[3].position.y &&
     !leverPressed4
   ) {
-    console.log("i");
     levers[3].image = leverLeftSprite;
     leverPressed4 = true;
   } else if (
@@ -781,8 +782,17 @@ window.addEventListener("keydown", ({ key }) => {
     player.position.y >= levers[3].position.y &&
     leverPressed4
   ) {
-    console.log("no");
     levers[3].image = leverRightSprite;
     leverPressed4 = false;
+  }
+  // End
+  if (
+    key === "e" &&
+    player.position.x + player.width >= end.position.x &&
+    player.position.x <= end.position.x + end.width &&
+    player.position.y >= end.position.y &&
+    leverPressed4
+  ) {
+    console.log("You Win!");
   }
 });
