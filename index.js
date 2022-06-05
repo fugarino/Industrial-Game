@@ -68,6 +68,7 @@ class Player {
     this.position = {
       x: 1460,
       y: 100,
+      // y: 700,
     };
 
     this.velocity = {
@@ -295,11 +296,18 @@ const platforms = [
   new Platform({ x: 1566, y: 1700, image: platformVines }),
   new Platform({ x: 1266, y: 1700, image: platformVines }),
   new Platform({ x: 966, y: 1700, image: platformVines }),
+  new Platform({ x: 2566, y: 450, image: platformVines }),
+  new Platform({ x: 2266, y: 450, image: platformVines }),
+  new Platform({ x: 1966, y: 450, image: platformVines }),
+  new Platform({ x: 1766, y: 450, image: platformVines }),
+  new Platform({ x: 1174, y: 450, image: platformVines }),
+  new Platform({ x: 2420, y: 260, image: platformVines }),
+  new Platform({ x: 2220, y: 260, image: platformVines }),
 ];
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
 const boxes = [
   new Box({ x: 1600, y: 900, image: boxSprite, id: 1 }),
-  new Box({ x: 1800, y: 900, image: boxSprite, id: 2 }),
+  new Box({ x: 1800, y: 100, image: boxSprite, id: 2 }),
   new Box({ x: 2000, y: 900, image: boxSprite, id: 2 }),
 ];
 const pressurePlates = [
@@ -316,13 +324,13 @@ const trapDoors = [
   new TrapDoor({ x: 800, y: 620, id: 4, image: trapDoorClosed }),
   new TrapDoor({ x: 100, y: 620, id: 5, image: trapDoorClosed }),
   new TrapDoor({ x: 300, y: 620, id: 5, image: trapDoorClosed }),
-  new TrapDoor({ x: 1100, y: 620, id: 6, image: trapDoorOpen }),
-  new TrapDoor({ x: 1300, y: 620, id: 6, image: trapDoorOpen }),
+  new TrapDoor({ x: 1523, y: 450, id: 6, image: trapDoorOpen }),
+  new TrapDoor({ x: 1643, y: 450, id: 6, image: trapDoorOpen }),
 ];
 const levers = [
   new Lever({ x: 460, y: 1338, image: leverLeftSprite }),
   new Lever({ x: 200, y: 1090, image: leverLeftSprite }),
-  new Lever({ x: 400, y: 1090, image: leverRightSprite }),
+  new Lever({ x: 2600, y: 145, image: leverRightSprite }),
   new Lever({ x: 1100, y: 1588, image: leverRightSprite }),
 ];
 const end = new End({ x: 2700, y: 587 });
@@ -588,6 +596,19 @@ function animate() {
       trapDoor.id === 6
     ) {
       player.velocity.y = 0;
+    }
+  });
+
+  trapDoors.forEach((trapDoor) => {
+    if (
+      boxes[1].position.y + boxes[1].height <= trapDoor.position.y &&
+      boxes[1].position.y + boxes[1].height + boxes[1].velocity.y + 12 >= trapDoor.position.y &&
+      boxes[1].position.x + boxes[1].width >= trapDoor.position.x &&
+      boxes[1].position.x <= trapDoor.position.x + trapDoor.width &&
+      leverPressed3 &&
+      trapDoor.id === 6
+    ) {
+      boxes[1].velocity.y = 0;
     }
   });
 
