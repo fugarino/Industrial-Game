@@ -661,6 +661,11 @@ function animate() {
   ) {
     player.currentSprite = player.sprites.run.left;
   }
+
+  // Lose Condition
+  if (player.position.y > canvas.height) {
+    window.location.reload();
+  }
 }
 animate();
 
