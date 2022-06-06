@@ -9,6 +9,9 @@ const gravity = 0.5;
 const platformVines = new Image();
 platformVines.src = "./img/Industrial-Platform-Vines.png";
 
+const platformAlt = new Image();
+platformAlt.src = "./img/PlatformAlt.png";
+
 const spriteIdleRight = new Image();
 spriteIdleRight.src = "./img/CharacterIdle.png";
 
@@ -53,6 +56,9 @@ endOff.src = "./img/Off.png";
 
 const endOn = new Image();
 endOn.src = "./img/On.png";
+
+const pipesBackground = new Image();
+pipesBackground.src = "./img/new4.png";
 
 // Active
 let isPressurePlate1Active = false;
@@ -278,6 +284,22 @@ class End {
   }
 }
 
+class BackgroundImage {
+  constructor({ x, y, width, height, image }) {
+    this.width = width;
+    this.height = height;
+    this.position = {
+      x: x,
+      y: y,
+    };
+    this.image = image;
+  }
+
+  draw() {
+    c.drawImage(this.image, this.position.x, this.position.y);
+  }
+}
+
 const player = new Player();
 const platforms = [
   new Platform({ x: 1378, y: 1200, image: platformVines }),
@@ -292,24 +314,31 @@ const platforms = [
   new Platform({ x: 310, y: 1200, image: platformVines }),
   new Platform({ x: 0, y: 1200, image: platformVines }),
   new Platform({ x: -600, y: 1200, image: platformVines }),
+  new Platform({ x: -900, y: 1200, image: platformVines }),
+  new Platform({ x: -1180, y: 1200, image: platformVines }),
   new Platform({ x: -300, y: 1200, image: platformVines }),
   new Platform({ x: 2400, y: 700, image: platformVines }),
   new Platform({ x: 2566, y: 700, image: platformVines }),
-  new Platform({ x: 1566, y: 1700, image: platformVines }),
-  new Platform({ x: 1266, y: 1700, image: platformVines }),
-  new Platform({ x: 966, y: 1700, image: platformVines }),
-  new Platform({ x: 2566, y: 450, image: platformVines }),
-  new Platform({ x: 2266, y: 450, image: platformVines }),
-  new Platform({ x: 1966, y: 450, image: platformVines }),
-  new Platform({ x: 1766, y: 450, image: platformVines }),
-  new Platform({ x: 1174, y: 450, image: platformVines }),
+  new Platform({ x: 1370, y: 1700, image: platformAlt }),
+  new Platform({ x: 1773, y: 1700, image: platformAlt }),
+  // new Platform({ x: 1266, y: 1700, image: platformVines }),
+  new Platform({ x: 966, y: 1700, image: platformAlt }),
+  new Platform({ x: 2576, y: 450, image: platformAlt }),
+  new Platform({ x: 2170, y: 450, image: platformAlt }),
+  new Platform({ x: 1766, y: 450, image: platformAlt }),
+  // new Platform({ x: 1766, y: 450, image: platformVines }),
+  new Platform({ x: 1098, y: 450, image: platformAlt }),
   new Platform({ x: 2420, y: 260, image: platformVines }),
   new Platform({ x: 2220, y: 260, image: platformVines }),
   new Platform({ x: -400, y: 850, image: platformVines }),
-  new Platform({ x: -750, y: 650, image: platformVines }),
-  new Platform({ x: -900, y: 550, image: platformVines }),
+  new Platform({ x: -795, y: 590, image: platformVines }),
+  new Platform({ x: -1170, y: 478, image: platformAlt }),
   new Platform({ x: -50, y: 280, image: platformVines }),
 ];
+platforms[26].width = 400;
+platforms[21].width = 400;
+platforms[18].width = 400;
+platforms[16].width = 400;
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
 const boxes = [
   new Box({ x: 1600, y: 900, image: boxSprite, id: 1 }),
@@ -318,15 +347,15 @@ const boxes = [
 ];
 const pressurePlates = [
   new PressurePlate({ x: 2070, y: 1090, id: 1 }),
-  new PressurePlate({ x: -450, y: 1090, id: 2 }),
-  new PressurePlate({ x: 1450, y: 1588, id: 3 }),
+  new PressurePlate({ x: -700, y: 1090, id: 2 }),
+  new PressurePlate({ x: 1850, y: 1588, id: 3 }),
 ];
 // const pressurePlate = new PressurePlate({ x: 2000, y: 1090 });
 const trapDoors = [
   new TrapDoor({ x: 1820, y: 960, id: 1, image: trapDoorClosed }),
   new TrapDoor({ x: 2100, y: 820, id: 2, image: trapDoorClosed }),
   new TrapDoor({ x: 1200, y: 1320, id: 3, image: trapDoorClosed }),
-  new TrapDoor({ x: -400, y: 720, id: 4, image: trapDoorClosed }),
+  new TrapDoor({ x: -380, y: 720, id: 4, image: trapDoorClosed }),
   new TrapDoor({ x: 50, y: 960, id: 4, image: trapDoorClosed }),
   new TrapDoor({ x: 600, y: 280, id: 5, image: trapDoorClosed }),
   new TrapDoor({ x: -350, y: 420, id: 5, image: trapDoorClosed }),
@@ -335,11 +364,16 @@ const trapDoors = [
 ];
 const levers = [
   new Lever({ x: 460, y: 1338, image: leverLeftSprite }),
-  new Lever({ x: -800, y: 440, image: leverLeftSprite }),
+  new Lever({ x: -1020, y: 368, image: leverLeftSprite }),
   new Lever({ x: 2400, y: 145, image: leverRightSprite }),
   new Lever({ x: 1100, y: 1588, image: leverRightSprite }),
 ];
 const end = new End({ x: 2700, y: 587 });
+const pipes = new BackgroundImage({
+  x: -1280,
+  y: 560,
+  image: pipesBackground,
+});
 
 let currentKey;
 const keys = {
@@ -360,6 +394,7 @@ const keys = {
 function animate() {
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
+  pipes.draw();
   platforms.forEach((platform) => {
     platform.draw();
   });
@@ -489,6 +524,7 @@ function animate() {
           lever.position.x -= 7;
         });
         end.position.x -= 7;
+        pipes.position.x -= 7;
         // wall.position.x -= 7;
       }
     } else if (keys.left.pressed) {
@@ -508,6 +544,7 @@ function animate() {
         lever.position.x += 7;
       });
       end.position.x += 7;
+      pipes.position.x += 7;
       // wall.position.x += 7;
     }
   }
@@ -531,6 +568,7 @@ function animate() {
       lever.position.y += 2;
     });
     end.position.y += 2;
+    pipes.position.y += 2;
     // wall.position.y += 2;
   } else if (player.position.y >= 1112) {
     platforms.forEach((platform) => {
@@ -550,6 +588,7 @@ function animate() {
       lever.position.y -= 6;
     });
     end.position.y -= 6;
+    pipes.position.y -= 6;
     // wall.position.y -= 6;
   }
 
