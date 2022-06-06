@@ -334,11 +334,12 @@ const platforms = [
   new Platform({ x: -795, y: 590, image: platformVines }),
   new Platform({ x: -1170, y: 478, image: platformAlt }),
   new Platform({ x: -50, y: 280, image: platformVines }),
+  new Platform({ x: -180, y: 280, image: platformVines }),
 ];
-platforms[26].width = 400;
-platforms[21].width = 400;
-platforms[18].width = 400;
-platforms[16].width = 400;
+platforms[28].width = 420;
+// platforms[21].width = 400;
+// platforms[18].width = 400;
+// platforms[16].width = 400;
 // const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
 const boxes = [
   new Box({ x: 1600, y: 900, image: boxSprite, id: 1 }),
@@ -358,7 +359,7 @@ const trapDoors = [
   new TrapDoor({ x: -380, y: 720, id: 4, image: trapDoorClosed }),
   new TrapDoor({ x: 50, y: 960, id: 4, image: trapDoorClosed }),
   new TrapDoor({ x: 600, y: 280, id: 5, image: trapDoorClosed }),
-  new TrapDoor({ x: -350, y: 420, id: 5, image: trapDoorClosed }),
+  new TrapDoor({ x: -550, y: 350, id: 5, image: trapDoorClosed }),
   new TrapDoor({ x: 1523, y: 450, id: 6, image: trapDoorOpen }),
   new TrapDoor({ x: 1643, y: 450, id: 6, image: trapDoorOpen }),
 ];
