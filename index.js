@@ -69,6 +69,13 @@ let leverPressed2 = false;
 let leverPressed3 = true;
 let leverPressed4 = false;
 let endPressed = false;
+let time = 0;
+
+function increment() {
+  time++;
+}
+
+const timer = setInterval(increment, 1000);
 
 class Player {
   constructor() {
@@ -830,7 +837,7 @@ window.addEventListener("keydown", ({ key }) => {
     levers[3].image = leverRightSprite;
     leverPressed4 = false;
   }
-  // End
+  // Win Condition
   if (
     key === "e" &&
     player.position.x + player.width >= end.position.x &&
@@ -838,6 +845,30 @@ window.addEventListener("keydown", ({ key }) => {
     player.position.y >= end.position.y &&
     leverPressed4
   ) {
-    console.log("You Win!");
+    const winPopup = document.querySelector(".win-popup");
+    const popupTime = document.querySelector(".win-popup-card-time");
+    const star1 = document.querySelector(".star1");
+    const star2 = document.querySelector(".star2");
+    const star3 = document.querySelector(".star3");
+    winPopup.style.display = "flex";
+    const min = Math.floor(time / 60).toString();
+    const sec = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
+    popupTime.textContent = `Time: ${min < 1 ? "" : min + "min"} ${sec}sec`;
+    console.log(min);
+    console.log(time);
+    if (time > 60) {
+      star3.classList.add("star-empty");
+    }
+    if (time > 120) {
+      star2.classList.add("star-empty");
+    }
+    clearInterval(timer);
   }
+});
+
+const popupRestartBtn = document.querySelector(".win-popup-card-restart-btn");
+popupRestartBtn.addEventListener("click", () => {
+  window.location.reload();
 });
