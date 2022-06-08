@@ -136,3 +136,79 @@ canvas {
   margin-bottom: 10px;
   color: rgb(211, 211, 211);
 }
+
+.help-menu-btn {
+  position: fixed;
+  left: 15px;
+  top: 15px;
+  width: 3rem;
+  border: none;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  height: 3rem;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #141414;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.5rem;
+  display: flex;
+}
+
+.help-menu-btn i {
+  position: relative;
+  left: 10px;
+  top: 8px;
+}
+
+.help-menu-btn:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
+.help-menu {
+  font-family: "Press Start 2P", sans-serif;
+  height: 100vh;
+  width: 100vw;
+  background-color: #141414d2;
+  position: fixed;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-menu-card {
+  max-width: 42rem;
+  height: 55rem;
+  width: 90%;
+  background-color: rgb(0, 0, 0);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+
+.help-menu-card-btn {
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  cursor: pointer;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  background-color: #000;
+}
+
+.help-menu-card-btn:hover {
+  color: #fff;
+}
+
+.help-menu-card-btn span {
+  font-size: 2.5rem;
+}
+
+/* .help-menu-card {
+  width: 27rem;
+  height: 40rem;
+  background-color: rgb(0, 0, 0);
+  border-radius: 15px;
+  overflow: hidden;
+} */

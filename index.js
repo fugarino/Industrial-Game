@@ -872,3 +872,15 @@ const popupRestartBtn = document.querySelector(".win-popup-card-restart-btn");
 popupRestartBtn.addEventListener("click", () => {
   window.location.reload();
 });
+
+const helpMenuBtn = document.querySelector(".help-menu-btn");
+const helpMenu = document.querySelector(".help-menu");
+const helpMenuCloseBtn = document.querySelector(".help-menu-card-btn");
+helpMenuBtn.addEventListener("click", () => {
+  helpMenuBtn.style.display = "none";
+  helpMenu.style.display = "flex";
+});
+helpMenuCloseBtn.addEventListener("click", () => {
+  helpMenu.style.display = "none";
+  helpMenuBtn.style.display = "flex";
+});
