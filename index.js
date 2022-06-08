@@ -60,6 +60,24 @@ endOn.src = "./img/On.png";
 const pipesBackground = new Image();
 pipesBackground.src = "./img/new4.png";
 
+const chains2 = new Image();
+chains2.src = "./img/Chains2.png";
+
+const chains3 = new Image();
+chains3.src = "./img/Chains3.png";
+
+const chains4 = new Image();
+chains4.src = "./img/Chains4.png";
+
+const chains4Closed = new Image();
+chains4Closed.src = "./img/Chains4Closed.png";
+
+const silo = new Image();
+silo.src = "./img/Silo.png";
+
+const electricBoard = new Image();
+electricBoard.src = "./img/ElectricBoard.png";
+
 // Active
 let isPressurePlate1Active = false;
 let isPressurePlate2Active = false;
@@ -324,8 +342,8 @@ const platforms = [
   new Platform({ x: -900, y: 1200, image: platformVines }),
   new Platform({ x: -1180, y: 1200, image: platformVines }),
   new Platform({ x: -300, y: 1200, image: platformVines }),
-  new Platform({ x: 2400, y: 700, image: platformVines }),
-  new Platform({ x: 2566, y: 700, image: platformVines }),
+  new Platform({ x: 2415, y: 750, image: platformVines }),
+  new Platform({ x: 2636, y: 750, image: platformVines }),
   new Platform({ x: 1370, y: 1700, image: platformAlt }),
   new Platform({ x: 1773, y: 1700, image: platformAlt }),
   // new Platform({ x: 1266, y: 1700, image: platformVines }),
@@ -376,12 +394,64 @@ const levers = [
   new Lever({ x: 2400, y: 145, image: leverRightSprite }),
   new Lever({ x: 1100, y: 1588, image: leverRightSprite }),
 ];
-const end = new End({ x: 2700, y: 587 });
-const pipes = new BackgroundImage({
-  x: -1280,
-  y: 560,
-  image: pipesBackground,
-});
+const end = new End({ x: 2740, y: 637 });
+const backgroundImages = [
+  new BackgroundImage({
+    x: -1280,
+    y: 560,
+    image: pipesBackground,
+  }),
+  new BackgroundImage({
+    x: 2400,
+    y: 533,
+    image: chains2,
+  }),
+  new BackgroundImage({
+    x: 2875,
+    y: 533,
+    image: chains2,
+  }),
+  new BackgroundImage({
+    x: 955,
+    y: 1480,
+    image: chains2,
+  }),
+  new BackgroundImage({
+    x: 330,
+    y: 1230,
+    image: chains2,
+  }),
+  new BackgroundImage({
+    x: 1505,
+    y: 1230,
+    image: chains2,
+  }),
+  new BackgroundImage({
+    x: 2090,
+    y: 1230,
+    image: chains4,
+  }),
+  new BackgroundImage({
+    x: 1100,
+    y: 532,
+    image: chains4Closed,
+  }),
+  new BackgroundImage({
+    x: 1090,
+    y: 78,
+    image: silo,
+  }),
+  new BackgroundImage({
+    x: 2460,
+    y: 825,
+    image: silo,
+  }),
+  new BackgroundImage({
+    x: -170,
+    y: 280,
+    image: electricBoard,
+  }),
+];
 
 let currentKey;
 const keys = {
@@ -402,7 +472,9 @@ const keys = {
 function animate() {
   requestAnimationFrame(animate);
   c.clearRect(0, 0, canvas.width, canvas.height);
-  pipes.draw();
+  backgroundImages.forEach((backgroundImage) => {
+    backgroundImage.draw();
+  });
   platforms.forEach((platform) => {
     platform.draw();
   });
@@ -532,7 +604,9 @@ function animate() {
           lever.position.x -= 7;
         });
         end.position.x -= 7;
-        pipes.position.x -= 7;
+        backgroundImages.forEach((backgroundImage) => {
+          backgroundImage.position.x -= 7;
+        });
         // wall.position.x -= 7;
       }
     } else if (keys.left.pressed) {
@@ -552,7 +626,9 @@ function animate() {
         lever.position.x += 7;
       });
       end.position.x += 7;
-      pipes.position.x += 7;
+      backgroundImages.forEach((backgroundImage) => {
+        backgroundImage.position.x += 7;
+      });
       // wall.position.x += 7;
     }
   }
@@ -576,7 +652,9 @@ function animate() {
       lever.position.y += 2;
     });
     end.position.y += 2;
-    pipes.position.y += 2;
+    backgroundImages.forEach((backgroundImage) => {
+      backgroundImage.position.y += 2;
+    });
     // wall.position.y += 2;
   } else if (player.position.y >= 1112) {
     platforms.forEach((platform) => {
@@ -596,7 +674,9 @@ function animate() {
       lever.position.y -= 6;
     });
     end.position.y -= 6;
-    pipes.position.y -= 6;
+    backgroundImages.forEach((backgroundImage) => {
+      backgroundImage.position.y -= 6;
+    });
     // wall.position.y -= 6;
   }
 
