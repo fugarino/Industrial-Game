@@ -855,7 +855,7 @@ window.addEventListener("keydown", ({ key }) => {
     const sec = Math.floor(time % 60)
       .toString()
       .padStart(2, "0");
-    popupTime.textContent = `Time: ${min < 1 ? "" : min + "min"} ${sec}sec`;
+    popupTime.textContent = `${min < 1 ? "" : min + "min"} ${sec}sec`;
     console.log(min);
     console.log(time);
     if (time > 60) {
