@@ -846,7 +846,7 @@ window.addEventListener("keydown", ({ key }) => {
     leverPressed4
   ) {
     const winPopup = document.querySelector(".win-popup");
-    const popupTime = document.querySelector(".win-popup-card-time");
+    const popupTime = document.querySelector(".win-popup-card-time-h3");
     const star1 = document.querySelector(".star1");
     const star2 = document.querySelector(".star2");
     const star3 = document.querySelector(".star3");
