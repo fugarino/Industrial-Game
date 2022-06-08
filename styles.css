@@ -183,6 +183,7 @@ canvas {
   border-radius: 15px;
   overflow: hidden;
   position: relative;
+  color: #fff;
 }
 
 .help-menu-card-btn {
@@ -205,10 +206,38 @@ canvas {
   font-size: 2.5rem;
 }
 
-/* .help-menu-card {
-  width: 27rem;
-  height: 40rem;
-  background-color: rgb(0, 0, 0);
-  border-radius: 15px;
-  overflow: hidden;
-} */
+.help-menu h2 {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.help-menu-wasd {
+  height: 17rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.help-menu-wasd img {
+  width: 50%;
+  position: relative;
+  left: 50px;
+}
+
+.help-menu-objective-h2 {
+  margin-bottom: 3rem;
+  margin-top: 2rem;
+}
+
+.help-menu-card p {
+  padding: 0 6rem;
+  margin-bottom: 1rem;
+  line-height: 40px;
+}
+
+@media screen and (max-width: 620px) {
+  .help-menu-card p {
+    font-size: 0.7rem;
+  }
+}
