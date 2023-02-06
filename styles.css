@@ -176,9 +176,9 @@ canvas {
 }
 
 .help-menu-card {
-  max-width: 42rem;
-  height: 55rem;
-  width: 90%;
+  width: 27rem;
+  height: 40rem;
+  padding: 2rem 0;
   background-color: rgb(0, 0, 0);
   border-radius: 15px;
   overflow: hidden;
@@ -208,36 +208,30 @@ canvas {
 
 .help-menu h2 {
   text-align: center;
-  margin-top: 4rem;
+  margin-top: 1rem;
 }
 
 .help-menu-wasd {
-  height: 17rem;
-  margin-top: 1rem;
+  height: 15rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .help-menu-wasd img {
-  width: 50%;
+  width: 60%;
   position: relative;
   left: 50px;
 }
 
 .help-menu-objective-h2 {
-  margin-bottom: 3rem;
-  margin-top: 2rem;
+  margin-bottom: 1rem;
 }
 
 .help-menu-card p {
-  padding: 0 6rem;
+  padding: 0 3rem;
   margin-bottom: 1rem;
-  line-height: 40px;
-}
-
-@media screen and (max-width: 620px) {
-  .help-menu-card p {
-    font-size: 0.7rem;
-  }
+  color: #e8e8e8;
+  line-height: 30px;
+  font-size: 0.7rem;
 }

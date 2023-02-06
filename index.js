@@ -1,3 +1,4 @@
+// Game Details
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
@@ -6,6 +7,7 @@ canvas.height = 2076;
 
 const gravity = 0.5;
 
+// Assets
 const platformVines = new Image();
 platformVines.src = "./img/Industrial-Platform-Vines.png";
 
@@ -26,9 +28,6 @@ spriteRunLeft.src = "./img/Untitled-3.png";
 
 const boxSprite = new Image();
 boxSprite.src = "./img/Industrial-Box.png";
-
-// const wallSprite = new Image();
-// wallSprite.src = "./img/WallRight.png";
 
 const pressurePlateSprite = new Image();
 pressurePlateSprite.src = "./img/PressurePlate.png";
@@ -78,7 +77,7 @@ silo.src = "./img/Silo.png";
 const electricBoard = new Image();
 electricBoard.src = "./img/ElectricBoard.png";
 
-// Active
+// Game State
 let isPressurePlate1Active = false;
 let isPressurePlate2Active = false;
 let isPressurePlate3Active = false;
@@ -87,19 +86,16 @@ let leverPressed2 = false;
 let leverPressed3 = true;
 let leverPressed4 = false;
 let endPressed = false;
+
+// Timer
 let time = 0;
+const timer = setInterval(() => time++, 1000);
 
-function increment() {
-  time++;
-}
-
-const timer = setInterval(increment, 1000);
-
+// Classes
 class Player {
   constructor() {
     this.position = {
       x: 1460,
-      // y: 100,
       y: 700,
     };
 
@@ -107,6 +103,7 @@ class Player {
       x: 0,
       y: 0,
     };
+
     this.width = 88;
     this.height = 88;
 
@@ -325,7 +322,9 @@ class BackgroundImage {
   }
 }
 
+// Game Objects
 const player = new Player();
+
 const platforms = [
   new Platform({ x: 1378, y: 1200, image: platformVines }),
   new Platform({ x: 1600, y: 1200, image: platformVines }),
@@ -346,12 +345,10 @@ const platforms = [
   new Platform({ x: 2636, y: 750, image: platformVines }),
   new Platform({ x: 1370, y: 1700, image: platformAlt }),
   new Platform({ x: 1773, y: 1700, image: platformAlt }),
-  // new Platform({ x: 1266, y: 1700, image: platformVines }),
   new Platform({ x: 966, y: 1700, image: platformAlt }),
   new Platform({ x: 2576, y: 450, image: platformAlt }),
   new Platform({ x: 2170, y: 450, image: platformAlt }),
   new Platform({ x: 1766, y: 450, image: platformAlt }),
-  // new Platform({ x: 1766, y: 450, image: platformVines }),
   new Platform({ x: 1098, y: 450, image: platformAlt }),
   new Platform({ x: 2420, y: 260, image: platformVines }),
   new Platform({ x: 2220, y: 260, image: platformVines }),
@@ -362,21 +359,19 @@ const platforms = [
   new Platform({ x: -180, y: 280, image: platformVines }),
 ];
 platforms[28].width = 420;
-// platforms[21].width = 400;
-// platforms[18].width = 400;
-// platforms[16].width = 400;
-// const wall = new Wall({ x: 2774, y: 560, image: wallSprite });
+
 const boxes = [
   new Box({ x: 1600, y: 900, image: boxSprite, id: 1 }),
   new Box({ x: 1800, y: 100, image: boxSprite, id: 2 }),
   new Box({ x: 400, y: 900, image: boxSprite, id: 2 }),
 ];
+
 const pressurePlates = [
   new PressurePlate({ x: 2070, y: 1090, id: 1 }),
   new PressurePlate({ x: -700, y: 1090, id: 2 }),
   new PressurePlate({ x: 1850, y: 1588, id: 3 }),
 ];
-// const pressurePlate = new PressurePlate({ x: 2000, y: 1090 });
+
 const trapDoors = [
   new TrapDoor({ x: 1820, y: 960, id: 1, image: trapDoorClosed }),
   new TrapDoor({ x: 2100, y: 820, id: 2, image: trapDoorClosed }),
@@ -388,13 +383,16 @@ const trapDoors = [
   new TrapDoor({ x: 1523, y: 450, id: 6, image: trapDoorOpen }),
   new TrapDoor({ x: 1643, y: 450, id: 6, image: trapDoorOpen }),
 ];
+
 const levers = [
   new Lever({ x: 460, y: 1338, image: leverLeftSprite }),
   new Lever({ x: -1020, y: 368, image: leverLeftSprite }),
   new Lever({ x: 2400, y: 145, image: leverRightSprite }),
   new Lever({ x: 1100, y: 1588, image: leverRightSprite }),
 ];
+
 const end = new End({ x: 2740, y: 637 });
+
 const backgroundImages = [
   new BackgroundImage({
     x: -1280,
@@ -453,6 +451,7 @@ const backgroundImages = [
   }),
 ];
 
+// Controls
 let currentKey;
 const keys = {
   up: {
@@ -469,17 +468,13 @@ const keys = {
   },
 };
 
-function animate() {
-  requestAnimationFrame(animate);
-  c.clearRect(0, 0, canvas.width, canvas.height);
+const updateAssets = () => {
   backgroundImages.forEach((backgroundImage) => {
     backgroundImage.draw();
   });
   platforms.forEach((platform) => {
     platform.draw();
   });
-  // wall.draw();
-  // box.draw();
   end.draw();
   pressurePlates.forEach((pressurePlate) => {
     pressurePlate.draw();
@@ -494,17 +489,9 @@ function animate() {
     box.update();
   });
   player.update();
+};
 
-  let pushingBoxRight = false;
-  let pushingBoxLeft = false;
-  let collidingWall = false;
-
-  if (leverPressed4) {
-    end.currentImage = end.image.on;
-  } else {
-    end.currentImage = end.image.off;
-  }
-
+const checkPressurePlates = () => {
   pressurePlates.forEach((pressurePlate) => {
     if (
       (player.position.x + player.width >= pressurePlate.position.x &&
@@ -547,8 +534,9 @@ function animate() {
       }
     }
   });
+};
 
-  // Box Collision
+const handleBoxCollision = () => {
   boxes.forEach((box) => {
     if (
       player.position.y + player.height <= box.position.y &&
@@ -577,8 +565,9 @@ function animate() {
       pushingBoxLeft = true;
     }
   });
+};
 
-  // X-Axis Platform Displacement
+const handleXAxisPlatformDisplacement = () => {
   if (keys.right.pressed && player.position.x < 1500) {
     player.velocity.x = 7;
   } else if (keys.left.pressed && player.position.x > 1450) {
@@ -587,28 +576,25 @@ function animate() {
     player.velocity.x = 0;
 
     if (keys.right.pressed) {
-      if (!collidingWall) {
-        platforms.forEach((platform) => {
-          platform.position.x -= 7;
-        });
-        boxes.forEach((box) => {
-          box.position.x -= 7;
-        });
-        pressurePlates.forEach((pressurePlate) => {
-          pressurePlate.position.x -= 7;
-        });
-        trapDoors.forEach((trapDoor) => {
-          trapDoor.position.x -= 7;
-        });
-        levers.forEach((lever) => {
-          lever.position.x -= 7;
-        });
-        end.position.x -= 7;
-        backgroundImages.forEach((backgroundImage) => {
-          backgroundImage.position.x -= 7;
-        });
-        // wall.position.x -= 7;
-      }
+      platforms.forEach((platform) => {
+        platform.position.x -= 7;
+      });
+      boxes.forEach((box) => {
+        box.position.x -= 7;
+      });
+      pressurePlates.forEach((pressurePlate) => {
+        pressurePlate.position.x -= 7;
+      });
+      trapDoors.forEach((trapDoor) => {
+        trapDoor.position.x -= 7;
+      });
+      levers.forEach((lever) => {
+        lever.position.x -= 7;
+      });
+      end.position.x -= 7;
+      backgroundImages.forEach((backgroundImage) => {
+        backgroundImage.position.x -= 7;
+      });
     } else if (keys.left.pressed) {
       platforms.forEach((platform) => {
         platform.position.x += 7;
@@ -629,11 +615,11 @@ function animate() {
       backgroundImages.forEach((backgroundImage) => {
         backgroundImage.position.x += 7;
       });
-      // wall.position.x += 7;
     }
   }
+};
 
-  // Y-Axis Playform Displacement
+const handleYAxisPlatformDisplacement = () => {
   if (player.position.y < 840) {
     platforms.forEach((platform) => {
       platform.position.y += 2;
@@ -655,7 +641,6 @@ function animate() {
     backgroundImages.forEach((backgroundImage) => {
       backgroundImage.position.y += 2;
     });
-    // wall.position.y += 2;
   } else if (player.position.y >= 1112) {
     platforms.forEach((platform) => {
       platform.position.y -= 6;
@@ -677,9 +662,10 @@ function animate() {
     backgroundImages.forEach((backgroundImage) => {
       backgroundImage.position.y -= 6;
     });
-    // wall.position.y -= 6;
   }
+};
 
+const checkTrapDoors = () => {
   trapDoors.forEach((trapDoor) => {
     if (
       player.position.y + player.height <= trapDoor.position.y &&
@@ -737,6 +723,21 @@ function animate() {
       player.velocity.y = 0;
     }
   });
+};
+
+// Game Loop
+const animate = () => {
+  requestAnimationFrame(animate);
+  c.clearRect(0, 0, canvas.width, canvas.height);
+
+  leverPressed4 ? (end.currentImage = end.image.on) : (end.currentImage = end.image.off);
+
+  updateAssets();
+  checkPressurePlates();
+  handleBoxCollision();
+  handleXAxisPlatformDisplacement();
+  handleYAxisPlatformDisplacement();
+  checkTrapDoors();
 
   trapDoors.forEach((trapDoor) => {
     if (
@@ -793,7 +794,7 @@ function animate() {
   if (player.position.y > canvas.height) {
     window.location.reload();
   }
-}
+};
 animate();
 
 // EventListeners
@@ -927,7 +928,6 @@ window.addEventListener("keydown", ({ key }) => {
   ) {
     const winPopup = document.querySelector(".win-popup");
     const popupTime = document.querySelector(".win-popup-card-time-h3");
-    const star1 = document.querySelector(".star1");
     const star2 = document.querySelector(".star2");
     const star3 = document.querySelector(".star3");
     winPopup.style.display = "flex";
