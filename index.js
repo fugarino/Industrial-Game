@@ -792,7 +792,8 @@ const animate = () => {
 
   // Lose Condition
   if (player.position.y > canvas.height) {
-    window.location.href = window.location.href;
+    window.location.reload();
+    return;
   }
 };
 animate();
