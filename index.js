@@ -792,8 +792,7 @@ const animate = () => {
 
   // Lose Condition
   if (player.position.y > canvas.height) {
-    const form = document.getElementById("form");
-    form.submit();
+    window.location.reload();
   }
 };
 animate();
